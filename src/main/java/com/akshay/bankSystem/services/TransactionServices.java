@@ -13,8 +13,8 @@ public interface TransactionServices {
 	
 	public Transaction TransferMoney(TransactionPayload details);
 	
-//	public List<Transaction> getAllTransactions();
-//	
-//	public List<Transaction> getAccountTransactions(int accountNumber);
+	public List<Transaction> getAllTransactions();
+	
+	public List<Transaction> getAccountTransactions(int accountNumber);
 	
 }

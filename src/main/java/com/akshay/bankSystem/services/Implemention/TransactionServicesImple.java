@@ -19,6 +19,7 @@ import com.akshay.bankSystem.repositories.UserRepository;
 import com.akshay.bankSystem.services.TransactionServices;
 
 @Service
+@Transactional
 public class TransactionServicesImple implements TransactionServices{
 
 	@Autowired
@@ -31,15 +32,18 @@ public class TransactionServicesImple implements TransactionServices{
 	@Override
 	@Transactional
 	public Transaction depositeMoney(TransactionPayload details) {
-
+		
+		if(details.getAmount() < 0) {
+			throw new ApiException("Enter Valide amount");
+		}
 		
 		Transaction transaction = new Transaction();
 		transaction.setAmount(details.getAmount());
 		transaction.setStatus(Constants.STATUS_PENDING);
 		transaction.setTransactionType(Constants.DEPOSIT_TRANSACTION);
 
-		try {
-			User user = this.getUserByUserId(details.getUserId());
+//		try {
+			this.getUserByUserId(details.getUserId());
 
 			Account account = this.getAccountByAccount(details.getAccountNumber());
 
@@ -56,26 +60,30 @@ public class TransactionServicesImple implements TransactionServices{
 
 			return updated.getTransactions().get(updated.getTransactions().size() - 1);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			transaction.setStatus(Constants.STATUS_FAILED);
-			return transactionRepository.save(transaction);
-		} finally {
-			System.out.println("Transaction completed ....");
-		}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			transaction.setStatus(Constants.STATUS_FAILED);
+//			return transactionRepository.save(transaction);
+//		} finally {
+//			System.out.println("Transaction completed ....");
+//		}
 	}
 
 	@Override
 	@Transactional
 	public Transaction WithdrawMoney(TransactionPayload details) {
+		
+		if(details.getAmount() < 0) {
+			throw new ApiException("Enter Valide amount");
+		}
 
 		Transaction transaction = new Transaction();
 		transaction.setAmount(details.getAmount());
 		transaction.setStatus(Constants.STATUS_PENDING);
 		transaction.setTransactionType(Constants.WITHDRAW_TRANSACTION);
 
-		try {
-			User user = this.getUserByUserId(details.getUserId());
+//		try {
+			this.getUserByUserId(details.getUserId());
 
 			Account account = this.getAccountByAccount(details.getAccountNumber());
 
@@ -102,26 +110,30 @@ public class TransactionServicesImple implements TransactionServices{
 
 			return updated.getTransactions().get(updated.getTransactions().size() - 1);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			transaction.setStatus(Constants.STATUS_FAILED);
-			return transactionRepository.save(transaction);
-		} finally {
-			System.out.println("Transaction completed ....");
-		}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			transaction.setStatus(Constants.STATUS_FAILED);
+//			return transactionRepository.save(transaction);
+//		} finally {
+//			System.out.println("Transaction completed ....");
+//		}
 	}
 
 	@Override
 	@Transactional
 	public Transaction TransferMoney(TransactionPayload details) {
+		
+		if(details.getAmount() < 0) {
+			throw new ApiException("Enter Valide amount");
+		}
 
 		Transaction transaction = new Transaction();
 		transaction.setAmount(details.getAmount());
 		transaction.setStatus(Constants.STATUS_PENDING);
 		transaction.setTransactionType(Constants.MONEY_TRANSFER);
 
-		try {
-			User user = this.getUserByUserId(details.getUserId());
+		//try {
+			this.getUserByUserId(details.getUserId());
 
 			Account account = this.getAccountByAccount(details.getAccountNumber());
 
@@ -148,6 +160,10 @@ public class TransactionServicesImple implements TransactionServices{
 			account.setTransactions(alltransList);
 
 			Account updated = accountRespository.save(account);
+			
+//			if(true) {	
+//				throw new ResourceNotFoundException("Kuch Nai", "Kuch Nai", 0);
+//			}
 
 			// received transaction
 
@@ -165,15 +181,26 @@ public class TransactionServicesImple implements TransactionServices{
 
 			return updated.getTransactions().get(updated.getTransactions().size() - 1);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			transaction.setStatus(Constants.STATUS_FAILED);
-			return transactionRepository.save(transaction);
-		} finally {
-			System.out.println("Transaction completed ....");
-		}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			transaction.setStatus(Constants.STATUS_FAILED);
+//			return transactionRepository.save(transaction);
+//		} finally {
+//			System.out.println("Transaction completed ....");
+//		}
 	}
 
+	@Override
+	public List<Transaction> getAllTransactions(){
+		return transactionRepository.findAll();
+	}
+	
+	@Override
+	public List<Transaction> getAccountTransactions(int accountNumber){
+		return this.getAccountByAccount(accountNumber).getTransactions();
+	}
+	
+	
 	public Account getAccountByAccount(int accountNumber) {
 		List<Account> accounts = accountRespository.findByAccountNumber(accountNumber);
 		if (accounts.isEmpty() || accounts.get(0) == null) {
