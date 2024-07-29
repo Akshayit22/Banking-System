@@ -18,6 +18,8 @@ public class Constants {
 	public static final int SAVING_MIN_BALANCE = 500;
 	public static final int CURRENT_MIN_BALANCE = 0;
 	
+	public static final String SECRET = "VeryBigSECRET";
+	
 //	private enum USER_ROLES {
 //		 CUSTOMER,EMPLOYEE,ADMIN
 //	}

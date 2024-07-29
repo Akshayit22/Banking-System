@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.akshay.bankSystem.entities.Account;
@@ -22,14 +23,14 @@ public class AccountServicesImple implements AccountServices{
 	@Autowired
 	private UserRepository userRepository;
 	
-//	@Autowired
-//	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Override
 	public Account createAccount(int userId, Account account) {
 		User user =  userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("account", "Id", userId));
 		
-		//account.setSecurityPin(passwordEncoder.encode(account.getSecurityPin()));
+		account.setSecurityPin(passwordEncoder.encode(account.getSecurityPin()));
 		account.setInterestRate(account.getAccountType().equalsIgnoreCase("saving")?5.5:3.3);
 		account.setUser(user);
 		
