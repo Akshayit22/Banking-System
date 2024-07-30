@@ -28,7 +28,9 @@ public class UserServicesImple implements UserServices {
 	
 	@Override
 	public User createUser(User user) {
+		
 		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+		
 		System.out.println(user.toString());
 		return userRepo.save(user);
 	}
