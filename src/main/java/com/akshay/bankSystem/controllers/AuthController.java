@@ -56,6 +56,7 @@ public class AuthController {
 		
 		JwtResponse response = new JwtResponse();
 		response.setToken(generateTokenString);
+		System.out.println(generateTokenString);
 		
 		return ResponseEntity.status(200).body(response);
 	}

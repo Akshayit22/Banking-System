@@ -57,8 +57,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 			if (this.jwtTokenHelper.validateToken(token, userDetails)) {
 				// Now authenticate
-				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-				usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+						userDetails, null, userDetails.getAuthorities());
+				usernamePasswordAuthenticationToken
+						.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 			} else {
 				System.out.println("Invalid JWT Token");
@@ -66,10 +68,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		} else {
 			System.out.println("Username is Null or context is Null");
 		}
-		
-		
+
 		filterChain.doFilter(request, response);
-		
+
 	}
 
 }

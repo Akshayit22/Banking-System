@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,7 @@ public class AccountController {
 	
 	@PostMapping("/account/user/{userId}")
 	public ResponseEntity<Account> createAccount(@PathVariable int userId,@RequestBody Account account) {
+		System.out.println(account);
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.createAccount(userId, account));
 	}
 	
@@ -31,7 +33,8 @@ public class AccountController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.updateAccount(userId, account));
 	}
 	
-	@GetMapping("/accounts")
+	@GetMapping("/bank/accounts")
+	@PreAuthorize("hasAuthority('EMPLOYEE','ADMIN')")
 	public ResponseEntity<List<Account>> getAllAccounts(){
 		return ResponseEntity.status(HttpStatus.OK).body(service.getAllAccounts());
 	}

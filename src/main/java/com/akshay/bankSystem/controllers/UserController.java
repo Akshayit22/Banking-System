@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +23,8 @@ public class UserController {
 	@Autowired
 	private UserServices service;
 
-	@GetMapping("/users")
+	@GetMapping("/bank/users")
+	@PreAuthorize("hasAuthority('EMPLOYEE','ADMIN')")
 	public ResponseEntity<List<User>> getAllUsers() {
 		List<User> all = service.getAllUsers();
 		if(all == null || all.size() == 0) {
@@ -57,7 +59,8 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(u);
 	}
 	
-	@DeleteMapping("/user/{user_id}")
+	@DeleteMapping("/admin/user/{user_id}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public HttpStatus deleteUser(@PathVariable int user_id) {
 		if(service.deleteUser(user_id)) {
 			return HttpStatus.ACCEPTED;
@@ -65,7 +68,8 @@ public class UserController {
 		return HttpStatus.NOT_MODIFIED;
 	}
 	
-	@PostMapping("/user")
+	@PostMapping("/bank/user")
+	@PreAuthorize("hasAuthority('EMPLOYEE','ADMIN')")
 	public ResponseEntity<User> creatUser(@RequestBody User user) {
 		User u = service.createUser(user);
 		if (u == null)

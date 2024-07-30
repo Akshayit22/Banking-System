@@ -1,9 +1,11 @@
 package com.akshay.bankSystem.security;
 
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -12,8 +14,8 @@ import com.akshay.bankSystem.configs.Constants;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
 
 @Component
@@ -34,16 +36,11 @@ public class JwtTokenHelper {
 		return claimsResolver.apply(claims);
 	}
 	
-	private byte[] getSignKey() {
-		byte[] bytes = new byte[36];
-		
-		return Decoders.BASE64URL.decode(Constants.SECRET);
-	}
 	
 	private Claims getAllClaimsFromToken(String token){
 		return Jwts
 				.parserBuilder()
-				.setSigningKey(getSignKey())
+				.setSigningKey(getSignInKey())
 				.build()
 				.parseClaimsJws(token)
 				.getBody();
@@ -53,27 +50,29 @@ public class JwtTokenHelper {
 		return getExpirationDateFromToken(token).before(new Date());
 	}
 	
-	public String generateToken(UserDetails userDetails)
-	{
+	public String generateToken(UserDetails userDetails) throws Exception{
 		Map<String, Object> claims=new HashMap<>();
 		return doGenerateToken(claims, userDetails.getUsername());
 	}
 	
-	@SuppressWarnings("deprecation")
-	private String doGenerateToken(Map<String, Object> claims, String subject) {
-
+	private String doGenerateToken(Map<String, Object> claims, String subject)throws Exception{
         return Jwts
         		.builder()
         		.setClaims(claims)
         		.setSubject(subject)
         		.setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + Jwt_Token_Validity))
-                .signWith(SignatureAlgorithm.HS512, getSignKey()).compact();
+                .signWith(getSignInKey()).compact();
     }
 	
 	public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+	
+	private Key getSignInKey() {
+	    byte[] keyBytes = Decoders.BASE64.decode(Constants.SECRET);
+	    return Keys.hmacShaKeyFor(keyBytes);
+	}
 	
 }

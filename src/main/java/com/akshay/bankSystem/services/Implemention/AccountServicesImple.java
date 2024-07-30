@@ -58,8 +58,8 @@ public class AccountServicesImple implements AccountServices{
 			accountUpdate.setCreatedAt(accountUpdate.getCreatedAt());
 			accountUpdate.setInterestRate(accountUpdate.getAccountType().equalsIgnoreCase("saving")?5.5:3.3);
 			accountUpdate.setUpdatedAt(new Date());
-			accountUpdate.setSecurityPin(account.getSecurityPin());
-			//accountUpdate.setSecurityPin(passwordEncoder.encode(account.getSecurityPin()));
+			//accountUpdate.setSecurityPin(account.getSecurityPin());
+			accountUpdate.setSecurityPin(passwordEncoder.encode(account.getSecurityPin()));
 			accountUpdate.setUser(user);
 			
 			Account newAccount = accountRespository.save(accountUpdate);
