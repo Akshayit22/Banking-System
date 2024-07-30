@@ -2,8 +2,6 @@ package com.akshay.bankSystem.entities;
 
 import java.util.Date;
 
-import org.springframework.security.core.userdetails.UserDetails;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -16,7 +14,7 @@ public class User {
 
 	@Id
 	@Column(name = "user_id")
-	@SequenceGenerator(name = "user_seq", sequenceName = "user_seq", allocationSize = 1, initialValue = 100)
+	@SequenceGenerator(name = "user_seq", sequenceName = "user_seq", allocationSize = 1, initialValue = 101)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
 	private int userId;
 
@@ -35,8 +33,6 @@ public class User {
 	@Column(name = "updatedAt", nullable = false)
 	private Date updatedAt;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	private UserDetails userDetails;
 
 	/*------- constructor - getters - setters -----------*/
 
@@ -118,13 +114,6 @@ public class User {
 		}
 	}
 
-	public UserDetails getUserDetails() {
-		return userDetails;
-	}
-
-	public void setUserDetails(UserDetails userDetails) {
-		this.userDetails = userDetails;
-	}
 
 //	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch=FetchType.EAGER)
 //	@JsonManagedReference

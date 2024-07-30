@@ -24,7 +24,7 @@ public class Address {
 
 	@Id
 	@Column(name = "address_id")
-	@SequenceGenerator(name = "address_seq", sequenceName = "address_seq", allocationSize = 1, initialValue = 100)
+	@SequenceGenerator(name = "address_seq", sequenceName = "address_seq", allocationSize = 1, initialValue = 101)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "address_seq")
 	private int addressId;
 
@@ -34,10 +34,10 @@ public class Address {
 	@Column(name = "area", nullable = false)
 	private String area;
 
-	@Column(name = "city")
+	@Column(name = "city",nullable = false)
 	private String city;
 
-	@Column(name = "pincode", columnDefinition = "age > 0")
+	@Column(name = "pincode",nullable = false)
 	private int pincode;
 
 	@Column(name = "createdAt", nullable = false)

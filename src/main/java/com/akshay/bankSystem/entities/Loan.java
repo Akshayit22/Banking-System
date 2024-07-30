@@ -17,9 +17,6 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
-/**
- * 
- */
 @Entity
 @Table(name = "loan")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "loanId")
@@ -27,7 +24,7 @@ public class Loan {
 
 	@Id
 	@Column(name = "loan_id", unique = true)
-	@SequenceGenerator(name = "loan_seq", sequenceName = "loan_seq", allocationSize = 1, initialValue = 1000)
+	@SequenceGenerator(name = "loan_seq", sequenceName = "loan_seq", allocationSize = 1, initialValue = 1001)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "loan_seq")
 	private int LoanId;
 

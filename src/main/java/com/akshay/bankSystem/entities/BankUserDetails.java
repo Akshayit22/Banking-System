@@ -24,7 +24,7 @@ public class BankUserDetails {
 
 	@Id
 	@Column(name = "user_details_id")
-	@SequenceGenerator(name = "userDetails_seq", sequenceName = "userDetails_seq", allocationSize = 1, initialValue = 100)
+	@SequenceGenerator(name = "userDetails_seq", sequenceName = "userDetails_seq", allocationSize = 1, initialValue = 101)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userDetails_seq")
 	private int userDetailsId;
 
@@ -37,7 +37,7 @@ public class BankUserDetails {
 	@Column(name = "gender", nullable = false)
 	private String gender;
 
-	@Column(name = "age", columnDefinition = "int constraint age_check check(age>18)")
+	@Column(name = "age", columnDefinition = "int constraint age_check check(age>18)",nullable = false)
 	private int age;
 
 	@Column(name = "createdAt", nullable = false)

@@ -34,127 +34,130 @@ public class TransactionServicesImple implements TransactionServices{
 	@Transactional
 	public Transaction depositeMoney(TransactionPayload details) throws TransactionException{
 		
-		if(details.getAmount() < 0) {
-			throw new ApiException("Enter Valide Amount");
-		}
-		
-		Transaction transaction = new Transaction();
-		transaction.setAmount(details.getAmount());
-		transaction.setStatus(Constants.STATUS_PENDING);
-		transaction.setTransactionType(Constants.DEPOSIT_TRANSACTION);
-
-			this.getUserByUserId(details.getUserId());
-
-			Account account = this.getAccountByAccount(details.getAccountNumber());
-
-			List<Transaction> alltransList = account.getTransactions();
-
-			account.setBalance(details.getAmount() + account.getBalance());
-			transaction.setStatus(Constants.STATUS_SUCCESS);
-
-			alltransList.add(transaction);
-			account.setTransactions(alltransList);
-			transaction.setAccount(account);
-
-			Account updated = accountRespository.save(account);
-
-			return updated.getTransactions().get(updated.getTransactions().size() - 1);
+//		if(details.getAmount() < 0) {
+//			throw new ApiException("Enter Valide Amount");
+//		}
+//		
+//		Transaction transaction = new Transaction();
+//		transaction.setAmount(details.getAmount());
+//		transaction.setStatus(Constants.STATUS_PENDING);
+//		transaction.setTransactionType(Constants.DEPOSIT_TRANSACTION);
+//
+//			this.getUserByUserId(details.getUserId());
+//
+//			Account account = this.getAccountByAccount(details.getAccountNumber());
+//
+//			List<Transaction> alltransList = account.getTransactions();
+//
+//			account.setBalance(details.getAmount() + account.getBalance());
+//			transaction.setStatus(Constants.STATUS_SUCCESS);
+//
+//			alltransList.add(transaction);
+//			account.setTransactions(alltransList);
+//			transaction.setAccount(account);
+//
+//			Account updated = accountRespository.save(account);
+//
+//			return updated.getTransactions().get(updated.getTransactions().size() - 1);
+		return null;
 	}
 
 	@Override
 	@Transactional
 	public Transaction WithdrawMoney(TransactionPayload details) throws TransactionException{
 		
-		if(details.getAmount() < 0) {
-			throw new ApiException("Enter Valide amount");
-		}
-
-		Transaction transaction = new Transaction();
-		transaction.setAmount(details.getAmount());
-		transaction.setStatus(Constants.STATUS_PENDING);
-		transaction.setTransactionType(Constants.WITHDRAW_TRANSACTION);
-
-			this.getUserByUserId(details.getUserId());
-
-			Account account = this.getAccountByAccount(details.getAccountNumber());
-
-			transaction.setAccount(account);
-
-			if (account.getBalance() < details.getAmount()) { // insufisiant balance
-				throw new TransactionException( "Insufisiant balance",transaction,details.getAccountNumber());
-			}
-
-			if (account.getAccountType().equalsIgnoreCase("Saving") && Constants.SAVING_MIN_BALANCE > (account.getBalance() - details.getAmount())) {
-				
-				throw new TransactionException( "Minimum balance of " + Constants.SAVING_MIN_BALANCE + " should maintained in saving Account.",transaction,details.getAccountNumber());
-			}
-
-			account.setBalance(account.getBalance() - details.getAmount());
-			transaction.setStatus(Constants.STATUS_SUCCESS);
-
-			List<Transaction> alltransList = account.getTransactions();
-			alltransList.add(transaction);
-			account.setTransactions(alltransList);
-
-			Account updated = accountRespository.save(account);
-
-			return updated.getTransactions().get(updated.getTransactions().size() - 1);
+//		if(details.getAmount() < 0) {
+//			throw new ApiException("Enter Valide amount");
+//		}
+//
+//		Transaction transaction = new Transaction();
+//		transaction.setAmount(details.getAmount());
+//		transaction.setStatus(Constants.STATUS_PENDING);
+//		transaction.setTransactionType(Constants.WITHDRAW_TRANSACTION);
+//
+//			this.getUserByUserId(details.getUserId());
+//
+//			Account account = this.getAccountByAccount(details.getAccountNumber());
+//
+//			transaction.setAccount(account);
+//
+//			if (account.getBalance() < details.getAmount()) { // insufisiant balance
+//				throw new TransactionException( "Insufisiant balance",transaction,details.getAccountNumber());
+//			}
+//
+//			if (account.getAccountType().equalsIgnoreCase("Saving") && Constants.SAVING_MIN_BALANCE > (account.getBalance() - details.getAmount())) {
+//				
+//				throw new TransactionException( "Minimum balance of " + Constants.SAVING_MIN_BALANCE + " should maintained in saving Account.",transaction,details.getAccountNumber());
+//			}
+//
+//			account.setBalance(account.getBalance() - details.getAmount());
+//			transaction.setStatus(Constants.STATUS_SUCCESS);
+//
+//			List<Transaction> alltransList = account.getTransactions();
+//			alltransList.add(transaction);
+//			account.setTransactions(alltransList);
+//
+//			Account updated = accountRespository.save(account);
+//
+//			return updated.getTransactions().get(updated.getTransactions().size() - 1);
+		return null;
 	}
 
 	@Override
 	@Transactional
 	public Transaction TransferMoney(TransactionPayload details) {
 		
-		if(details.getAmount() < 0) {
-			throw new ApiException("Enter Valide amount");
-		}
-
-		Transaction transaction = new Transaction();
-		transaction.setAmount(details.getAmount());
-		transaction.setStatus(Constants.STATUS_PENDING);
-		transaction.setTransactionType(Constants.MONEY_TRANSFER);
-
-			this.getUserByUserId(details.getUserId());
-
-			Account account = this.getAccountByAccount(details.getAccountNumber());
-
-			Account targetAccount = this.getAccountByAccount(details.getTargetAccountNumber());
-
-			List<Transaction> alltransList = account.getTransactions();
-			List<Transaction> alltragetTransList = targetAccount.getTransactions();
-
-			transaction.setAccount(account);
-
-			if (account.getBalance() < details.getAmount()) { // Insufficient balance
-				throw new TransactionException( "Insufisiant balance",transaction,details.getAccountNumber());
-			}
-
-			if (account.getAccountType().equalsIgnoreCase("Saving") && Constants.SAVING_MIN_BALANCE > (account.getBalance() - details.getAmount())) {
-				
-				throw new TransactionException( "Minimum balance of " + Constants.SAVING_MIN_BALANCE + " should main in saving Account.",transaction,details.getAccountNumber());
-
-			}
-
-			account.setBalance(account.getBalance() - details.getAmount());
-			transaction.setStatus(Constants.STATUS_SUCCESS);
-			alltransList.add(transaction);
-			account.setTransactions(alltransList);
-
-			Account updated = accountRespository.save(account);
-			
-			Transaction receviedTransaction = new Transaction();
-			receviedTransaction.setAmount(details.getAmount());
-			receviedTransaction.setStatus(Constants.STATUS_SUCCESS);
-			receviedTransaction.setTransactionType(Constants.MONEY_RECEIVED + details.getAccountNumber());
-
-			targetAccount.setBalance(targetAccount.getBalance() + details.getAmount());
-			receviedTransaction.setAccount(targetAccount);
-			alltransList.add(receviedTransaction);
-			targetAccount.setTransactions(alltragetTransList);
-
-			accountRespository.save(targetAccount);
-
-			return updated.getTransactions().get(updated.getTransactions().size() - 1);
+//		if(details.getAmount() < 0) {
+//			throw new ApiException("Enter Valide amount");
+//		}
+//
+//		Transaction transaction = new Transaction();
+//		transaction.setAmount(details.getAmount());
+//		transaction.setStatus(Constants.STATUS_PENDING);
+//		transaction.setTransactionType(Constants.MONEY_TRANSFER);
+//
+//			this.getUserByUserId(details.getUserId());
+//
+//			Account account = this.getAccountByAccount(details.getAccountNumber());
+//
+//			Account targetAccount = this.getAccountByAccount(details.getTargetAccountNumber());
+//
+//			List<Transaction> alltransList = account.getTransactions();
+//			List<Transaction> alltragetTransList = targetAccount.getTransactions();
+//
+//			transaction.setAccount(account);
+//
+//			if (account.getBalance() < details.getAmount()) { // Insufficient balance
+//				throw new TransactionException( "Insufisiant balance",transaction,details.getAccountNumber());
+//			}
+//
+//			if (account.getAccountType().equalsIgnoreCase("Saving") && Constants.SAVING_MIN_BALANCE > (account.getBalance() - details.getAmount())) {
+//				
+//				throw new TransactionException( "Minimum balance of " + Constants.SAVING_MIN_BALANCE + " should main in saving Account.",transaction,details.getAccountNumber());
+//
+//			}
+//
+//			account.setBalance(account.getBalance() - details.getAmount());
+//			transaction.setStatus(Constants.STATUS_SUCCESS);
+//			alltransList.add(transaction);
+//			account.setTransactions(alltransList);
+//
+//			Account updated = accountRespository.save(account);
+//			
+//			Transaction receviedTransaction = new Transaction();
+//			receviedTransaction.setAmount(details.getAmount());
+//			receviedTransaction.setStatus(Constants.STATUS_SUCCESS);
+//			receviedTransaction.setTransactionType(Constants.MONEY_RECEIVED + details.getAccountNumber());
+//
+//			targetAccount.setBalance(targetAccount.getBalance() + details.getAmount());
+//			receviedTransaction.setAccount(targetAccount);
+//			alltransList.add(receviedTransaction);
+//			targetAccount.setTransactions(alltragetTransList);
+//
+//			accountRespository.save(targetAccount);
+//
+//			return updated.getTransactions().get(updated.getTransactions().size() - 1);
+		return null;
 	}
 
 	@Override
@@ -164,7 +167,8 @@ public class TransactionServicesImple implements TransactionServices{
 	
 	@Override
 	public List<Transaction> getAccountTransactions(int accountNumber){
-		return this.getAccountByAccount(accountNumber).getTransactions();
+		//return this.getAccountByAccount(accountNumber).getTransactions();
+		return null;
 	}
 	
 	@Override

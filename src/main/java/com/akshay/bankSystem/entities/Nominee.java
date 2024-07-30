@@ -24,7 +24,7 @@ public class Nominee {
 
 	@Id
 	@Column(name = "nominee_id", unique = true)
-	@SequenceGenerator(name = "nominee_seq", sequenceName = "nominee_seq", allocationSize = 1, initialValue = 1)
+	@SequenceGenerator(name = "nominee_seq", sequenceName = "nominee_seq", allocationSize = 1, initialValue = 101)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "nominee_seq")
 	private int nomineeId;
 
@@ -47,9 +47,9 @@ public class Nominee {
 	private Date updatedAt;
 
 	@OneToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "account_number")
 	@JsonBackReference
-	private User user;
+	private Account account;
 
 	/*------- constructor - getters - setters -----------*/
 
@@ -58,7 +58,7 @@ public class Nominee {
 	}
 
 	public Nominee(int nomineeId, String name, String relation, String mobile, String address, Date createdAt,
-			Date updatedAt, User user) {
+			Date updatedAt) {
 		super();
 		this.nomineeId = nomineeId;
 		this.name = name;
@@ -67,7 +67,6 @@ public class Nominee {
 		this.address = address;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
-		this.user = user;
 	}
 
 	public int getNomineeId() {
@@ -126,12 +125,12 @@ public class Nominee {
 		this.updatedAt = updatedAt;
 	}
 
-	public User getUser() {
-		return user;
+	public Account getAccount() {
+		return account;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
 	@PrePersist

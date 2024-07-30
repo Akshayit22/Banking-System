@@ -24,7 +24,7 @@ public class Branch {
 
 	@Id
 	@Column(name = "branch_id", unique = true)
-	@SequenceGenerator(name = "branch_seq", sequenceName = "branch_seq", allocationSize = 1, initialValue = 1)
+	@SequenceGenerator(name = "branch_seq", sequenceName = "branch_seq", allocationSize = 1, initialValue = 11)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "branch_seq")
 	private int branchId;
 

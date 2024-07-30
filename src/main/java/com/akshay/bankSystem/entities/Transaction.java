@@ -15,7 +15,7 @@ public class Transaction {
 
 	@Id
 	@Column(name = "transaction_id", unique = true)
-	@SequenceGenerator(name = "trans_seq", sequenceName = "trans_seq", allocationSize = 1, initialValue = 1000)
+	@SequenceGenerator(name = "trans_seq", sequenceName = "trans_seq", allocationSize = 1, initialValue = 1001)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trans_seq")
 	private int transactionId;
 

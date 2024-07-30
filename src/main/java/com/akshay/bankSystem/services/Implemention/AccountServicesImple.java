@@ -28,44 +28,45 @@ public class AccountServicesImple implements AccountServices{
 	
 	@Override
 	public Account createAccount(int userId, Account account) {
-		User user =  userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("account", "Id", userId));
-		
-		account.setSecurityPin(passwordEncoder.encode(account.getSecurityPin()));
-		account.setInterestRate(account.getAccountType().equalsIgnoreCase("saving")?5.5:3.3);
-		account.setUser(user);
-		
-		List<Account> userAccountList = user.getAccounts();
-		userAccountList.add(account);
-		user.setAccounts(userAccountList);
-		
-		accountRespository.save(account);
-		
-		
-		return account;
+//		User user =  userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("account", "Id", userId));
+//		
+//		account.setSecurityPin(passwordEncoder.encode(account.getSecurityPin()));
+//		account.setInterestRate(account.getAccountType().equalsIgnoreCase("saving")?5.5:3.3);
+//		account.setUser(user);
+//		
+//		List<Account> userAccountList = user.getAccounts();
+//		userAccountList.add(account);
+//		user.setAccounts(userAccountList);
+//		
+//		accountRespository.save(account);
+//		
+//		return account;
+		return null;
 	}
 	
 	@Override
 	public Account updateAccount(int userId, Account account) {
-		
-			Account accountUpdate = accountRespository.findByAccountNumber(account.getAccountNumber()).get(0);
-			
-			User user = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("user", "userId", userId));
-			
-			accountUpdate.setName(account.getName());
-			accountUpdate.setMobile(account.getMobile());
-			accountUpdate.setBalance(account.getBalance());
-			accountUpdate.setAccountType(account.getAccountType());
-			accountUpdate.setCreatedAt(accountUpdate.getCreatedAt());
-			accountUpdate.setInterestRate(accountUpdate.getAccountType().equalsIgnoreCase("saving")?5.5:3.3);
-			accountUpdate.setUpdatedAt(new Date());
-			//accountUpdate.setSecurityPin(account.getSecurityPin());
-			accountUpdate.setSecurityPin(passwordEncoder.encode(account.getSecurityPin()));
-			accountUpdate.setUser(user);
-			
-			Account newAccount = accountRespository.save(accountUpdate);
-			
-			
-			return newAccount;
+//		
+//			Account accountUpdate = accountRespository.findByAccountNumber(account.getAccountNumber()).get(0);
+//			
+//			User user = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("user", "userId", userId));
+//			
+//			accountUpdate.setName(account.getName());
+//			accountUpdate.setMobile(account.getMobile());
+//			accountUpdate.setBalance(account.getBalance());
+//			accountUpdate.setAccountType(account.getAccountType());
+//			accountUpdate.setCreatedAt(accountUpdate.getCreatedAt());
+//			accountUpdate.setInterestRate(accountUpdate.getAccountType().equalsIgnoreCase("saving")?5.5:3.3);
+//			accountUpdate.setUpdatedAt(new Date());
+//			//accountUpdate.setSecurityPin(account.getSecurityPin());
+//			accountUpdate.setSecurityPin(passwordEncoder.encode(account.getSecurityPin()));
+//			accountUpdate.setUser(user);
+//			
+//			Account newAccount = accountRespository.save(accountUpdate);
+//			
+//			
+//			return newAccount;
+		return null;
 
 	}
 	
@@ -94,17 +95,18 @@ public class AccountServicesImple implements AccountServices{
 	@Override
 	public List<Account> getAccountsByUserId(int userId) {
 		
-		try {
-			User user = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("Account", "AccountNumber", userId));
-			List<Account> accounts =  user.getAccounts();
-			if(accounts.isEmpty() || accounts.size() == 0)
-				return null;
-			return accounts;
-			
-		}catch(Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+//		try {
+//			User user = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("Account", "AccountNumber", userId));
+//			List<Account> accounts =  user.getAccounts();
+//			if(accounts.isEmpty() || accounts.size() == 0)
+//				return null;
+//			return accounts;
+//			
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//			return null;
+//		}
+		return null;
 		
 	}
 	
