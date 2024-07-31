@@ -1,8 +1,10 @@
 package com.akshay.bankSystem.payloads;
 
+import jakarta.persistence.Entity;
 import lombok.Data;
 
 @Data
+@Entity
 public class TransactionPayload {
 	
 	private int AccountNumber;

@@ -13,10 +13,24 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserDto {
 
-	private String username;
+	private String userName;
 	
 	private String userRole;
-	
-	private String password;
 
+	public String getUsername() {
+		return userName;
+	}
+
+	public void setUsername(String username) {
+		this.userName = username;
+	}
+
+	public String getUserRole() {
+		return userRole;
+	}
+
+	public void setUserRole(String userRole) {
+		this.userRole = userRole;
+	}
+	
 }

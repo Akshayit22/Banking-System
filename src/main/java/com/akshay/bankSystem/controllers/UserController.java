@@ -14,15 +14,88 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.akshay.bankSystem.dto.AddressDto;
+import com.akshay.bankSystem.dto.UserDetailsDto;
+import com.akshay.bankSystem.dto.UserDto;
+import com.akshay.bankSystem.dto.UserInfo;
 import com.akshay.bankSystem.entities.User;
+import com.akshay.bankSystem.payloads.SignupRequest;
 import com.akshay.bankSystem.services.SecuredRestController;
 import com.akshay.bankSystem.services.UserServices;
 
 @RestController
 public class UserController implements SecuredRestController{
 
+	private static final String String = null;
 	@Autowired
 	private UserServices service;
+	
+	
+	/*---------------------- User Routes ------------------------*/
+	
+	@PutMapping("/user/{username}")
+	public ResponseEntity<UserDto> updateUser(@PathVariable String username,@RequestBody SignupRequest user){
+		
+		UserDto u = service.updateUser(username, user);
+		if (u == null)
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(u);
+	}
+	
+	
+	@PostMapping("/user/userdetails/{username}")
+	public ResponseEntity<UserDetailsDto> createUserDetails(@PathVariable String username,@RequestBody UserDetailsDto details){
+		
+		UserDetailsDto updated = service.createUserDetails(username, details);
+		if (updated == null)
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(updated);
+	}
+	
+	
+	@PutMapping("/user/userdetails/{username}")
+	public ResponseEntity<UserDetailsDto> updateUserDetails(@PathVariable String username,@RequestBody UserDetailsDto user){
+		
+		UserDetailsDto u = service.updateUserDetails(username, user);
+		if (u == null)
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(u);
+	}
+	
+	@PostMapping("/user/address/{username}")
+	public ResponseEntity<AddressDto> createAddress(@PathVariable String username,@RequestBody AddressDto address){
+		
+		AddressDto newAddress = service.createAddress(username, address);
+		if (newAddress == null)
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(newAddress);
+	}
+	
+	@PutMapping("/user/address/{username}")
+	public ResponseEntity<AddressDto> updateAddress(@PathVariable String username,@RequestBody AddressDto address){
+		
+		AddressDto newAddress = service.updateAddress(username, address);
+		if (newAddress == null)
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(newAddress);
+	}
+	
+	@GetMapping("/user/details/{username}")
+	public ResponseEntity<UserInfo> getUserInfo(@PathVariable String username){
+		
+		UserInfo info = this.service.getUserInformation(username);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(info);
+	}
+	
+	
+	
+	
 
 	@GetMapping("/bank/users")
 	@PreAuthorize("hasAuthority('EMPLOYEE','ADMIN')")
@@ -52,13 +125,7 @@ public class UserController implements SecuredRestController{
 		return ResponseEntity.status(HttpStatus.FOUND).body(u);
 	}
 	
-	@PutMapping("/user/{user_id}")
-	public ResponseEntity<User> updateUser(@PathVariable int user_id,@RequestBody User user){
-		User u = service.updateUser(user_id, user);
-		if (u == null)
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-		return ResponseEntity.status(HttpStatus.CREATED).body(u);
-	}
+	
 	
 	@DeleteMapping("/admin/user/{user_id}")
 	@PreAuthorize("hasAuthority('ADMIN')")
@@ -69,13 +136,13 @@ public class UserController implements SecuredRestController{
 		return HttpStatus.NOT_MODIFIED;
 	}
 	
-	@PostMapping("/bank/user")
-	@PreAuthorize("hasAuthority('EMPLOYEE','ADMIN')")
-	public ResponseEntity<User> creatUser(@RequestBody User user) {
-		User u = service.createUser(user);
-		if (u == null)
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-		return ResponseEntity.status(HttpStatus.CREATED).body(u);
-	}
+//	@PostMapping("/bank/user")
+//	@PreAuthorize("hasAuthority('EMPLOYEE','ADMIN')")
+//	public ResponseEntity<User> creatUser(@RequestBody User user) {
+//		User u = service.createUser(user);
+//		if (u == null)
+//			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+//		return ResponseEntity.status(HttpStatus.CREATED).body(u);
+//	}
 	
 }
