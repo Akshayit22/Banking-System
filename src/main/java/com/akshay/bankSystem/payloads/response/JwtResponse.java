@@ -1,4 +1,4 @@
-package com.akshay.bankSystem.payloads;
+package com.akshay.bankSystem.payloads.response;
 
 import lombok.Data;
 

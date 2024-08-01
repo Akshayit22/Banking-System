@@ -2,113 +2,158 @@ package com.akshay.bankSystem.services.Implemention;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.akshay.bankSystem.dto.AccountDto;
+import com.akshay.bankSystem.dto.NomineeDto;
 import com.akshay.bankSystem.entities.Account;
+import com.akshay.bankSystem.entities.Nominee;
 import com.akshay.bankSystem.entities.User;
 import com.akshay.bankSystem.exceptions.ResourceNotFoundException;
 import com.akshay.bankSystem.repositories.AccountRespository;
+import com.akshay.bankSystem.repositories.NomineeRepositoty;
 import com.akshay.bankSystem.repositories.UserRepository;
 import com.akshay.bankSystem.services.AccountServices;
 
 @Service
-public class AccountServicesImple implements AccountServices{
-	
+public class AccountServicesImple implements AccountServices {
+
 	@Autowired
 	private AccountRespository accountRespository;
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
+	@Autowired
+	private NomineeRepositoty nomineeRepositoty;
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
+	@Autowired
+	private ModelMapper modelMapper;
+
+	/*----------------- Account service ---------------------*/
+
 	@Override
-	public Account createAccount(int userId, Account account) {
-//		User user =  userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("account", "Id", userId));
-//		
-//		account.setSecurityPin(passwordEncoder.encode(account.getSecurityPin()));
-//		account.setInterestRate(account.getAccountType().equalsIgnoreCase("saving")?5.5:3.3);
-//		account.setUser(user);
-//		
-//		List<Account> userAccountList = user.getAccounts();
-//		userAccountList.add(account);
-//		user.setAccounts(userAccountList);
-//		
-//		accountRespository.save(account);
-//		
-//		return account;
-		return null;
+	public AccountDto createAccount(String username, AccountDto account) {
+		User user = this.getUserByUsername(username);
+
+		Account newAccount = this.modelMapper.map(account, Account.class);
+
+		newAccount.setSecurityPin(passwordEncoder.encode(account.getSecurityPin()));
+		newAccount.setInterestRate(account.getAccountType().equalsIgnoreCase("saving") ? 5.5 : 3.3);
+		newAccount.setUser(user);
+
+		AccountDto newAccountDto = this.modelMapper.map(accountRespository.save(newAccount), AccountDto.class);
+
+		return newAccountDto;
 	}
-	
+
 	@Override
-	public Account updateAccount(int userId, Account account) {
-//		
-//			Account accountUpdate = accountRespository.findByAccountNumber(account.getAccountNumber()).get(0);
-//			
-//			User user = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("user", "userId", userId));
-//			
-//			accountUpdate.setName(account.getName());
-//			accountUpdate.setMobile(account.getMobile());
-//			accountUpdate.setBalance(account.getBalance());
-//			accountUpdate.setAccountType(account.getAccountType());
-//			accountUpdate.setCreatedAt(accountUpdate.getCreatedAt());
-//			accountUpdate.setInterestRate(accountUpdate.getAccountType().equalsIgnoreCase("saving")?5.5:3.3);
-//			accountUpdate.setUpdatedAt(new Date());
-//			//accountUpdate.setSecurityPin(account.getSecurityPin());
-//			accountUpdate.setSecurityPin(passwordEncoder.encode(account.getSecurityPin()));
-//			accountUpdate.setUser(user);
-//			
-//			Account newAccount = accountRespository.save(accountUpdate);
-//			
-//			
-//			return newAccount;
-		return null;
+	public AccountDto updateAccount(String username, AccountDto account) {
+
+		User user = this.getUserByUsername(username);
+
+		Account accountUpdate = accountRespository.findById(account.getAccountNumber()).orElseThrow(
+				() -> new ResourceNotFoundException("Account", "AccountNumber", account.getAccountNumber()));
+
+		accountUpdate.setAccountType(account.getAccountType());
+		accountUpdate.setInterestRate(accountUpdate.getAccountType().equalsIgnoreCase("saving") ? 5.5 : 3.3);
+		accountUpdate.setUpdatedAt(new Date());
+		accountUpdate.setSecurityPin(passwordEncoder.encode(account.getSecurityPin()));
+		accountUpdate.setUser(user);
+
+		AccountDto newAccountDto = this.modelMapper.map(accountRespository.save(accountUpdate), AccountDto.class);
+
+		return newAccountDto;
 
 	}
-	
+
 	@Override
-	public List<Account> getAllAccounts(){
-		return accountRespository.findAll();
+	public AccountDto getAccountByAccountNumber(int accountNumber) {
+		Account account = accountRespository.findById(accountNumber)
+				.orElseThrow(() -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber));
+		return this.modelMapper.map(account, AccountDto.class);
+	}
+
+	@Override
+	public List<AccountDto> getAccountsByUsername(String username) {
+
+		User user = userRepository.getUserByUsername(username);
+
+		List<Account> accountslist = accountRespository.findByUser(user);
+
+		List<AccountDto> dtos = accountslist.stream().map((account) -> this.modelMapper.map(account, AccountDto.class))
+				.collect(Collectors.toList());
+
+		return dtos;
+	}
+
+	/*---------------------- Account - Nominee --------------*/
+
+	@Override
+	public NomineeDto createNominee(int accountNumber, NomineeDto nominee) {
+		Account account = accountRespository.findById(accountNumber)
+							.orElseThrow(() -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber));
+		
+		Nominee newNominee = this.modelMapper.map(nominee, Nominee.class);
+		newNominee.setAccount(account);
+		
+		newNominee = nomineeRepositoty.save(newNominee);
+		return this.modelMapper.map(newNominee, NomineeDto.class);
+	}
+
+	@Override
+	public NomineeDto updateNominee(int accountNumber, NomineeDto nominee) {
+//		Account account = accountRespository.findById(accountNumber)
+//				.orElseThrow(() -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber));
+		Nominee updateNominee = nomineeRepositoty.getNomineeByAccountNumber(accountNumber); 
+		
+		updateNominee.setName(nominee.getName());
+		updateNominee.setMobile(nominee.getMobile());
+		updateNominee.setRelation(nominee.getRelation());
+		updateNominee.setAddress(nominee.getAddress());
+		updateNominee.setUpdatedAt(new Date());
+		
+		Nominee newRecord = nomineeRepositoty.save(updateNominee);
+		
+		return this.modelMapper.map(newRecord, NomineeDto.class);
+	}
+
+	/*----------------- Bank : service ---------------------*/
+
+	@Override
+	public List<AccountDto> getAllAccounts() {
+		List<Account> accountslist = accountRespository.findAll();
+		List<AccountDto> dtos = accountslist.stream().map((account) -> this.modelMapper.map(account, AccountDto.class))
+				.collect(Collectors.toList());
+
+		return dtos;
 	}
 	
 	@Override
-	public Account getAccountByAccountNumber(int accountNumber) {
-		//Account account = accountRespository.findById(accountNumber).orElseThrow(()-> new ResourceNotFoundException("Account", "AccountNumber", accountNumber));
-		//return account;
-		try {
-			List<Account> accounts = accountRespository.findByAccountNumber(accountNumber);
-			
-			if(accounts.isEmpty() || accounts.size() == 0)
-				return null;
-			return accounts.get(0);
-			
-		}catch(Exception e) {
-			e.printStackTrace();
-			return null;
+	public List<NomineeDto> getAllNominees(){
+		List<Nominee> list = nomineeRepositoty.findAll();
+		List<NomineeDto> dtos = list.stream().map((nominee)-> this.modelMapper.map(nominee, NomineeDto.class))
+				.collect(Collectors.toList());
+		
+		return dtos;
+	}
+
+	/*-------------- Helper function ------------------------*/
+
+	public User getUserByUsername(String username) {
+		User user = userRepository.getUserByUsername(username);
+		if (user == null) {
+			throw new ResourceNotFoundException("username", "username", username);
 		}
+		return user;
 	}
-	
-	@Override
-	public List<Account> getAccountsByUserId(int userId) {
-		
-//		try {
-//			User user = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("Account", "AccountNumber", userId));
-//			List<Account> accounts =  user.getAccounts();
-//			if(accounts.isEmpty() || accounts.size() == 0)
-//				return null;
-//			return accounts;
-//			
-//		}catch(Exception e) {
-//			e.printStackTrace();
-//			return null;
-//		}
-		return null;
-		
-	}
-	
-	
+
 }

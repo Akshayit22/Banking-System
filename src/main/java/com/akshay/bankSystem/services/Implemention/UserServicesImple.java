@@ -2,6 +2,7 @@ package com.akshay.bankSystem.services.Implemention;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import com.akshay.bankSystem.entities.Address;
 import com.akshay.bankSystem.entities.BankUserDetails;
 import com.akshay.bankSystem.entities.User;
 import com.akshay.bankSystem.exceptions.ResourceNotFoundException;
-import com.akshay.bankSystem.payloads.SignupRequest;
+import com.akshay.bankSystem.payloads.request.SignupRequest;
 
 @Service
 public class UserServicesImple implements UserServices {
@@ -140,40 +141,16 @@ public class UserServicesImple implements UserServices {
 	}
 	
 	
-	
-	
-	/*-------------------- Helper Functions --------------------------- */
+	/*-------------------- Helper Functions and Bank services --------------------------- */
+
 	
 	public BankUserDetails getUserDetailsByUsername(String username) {
-//		
-//		User user =  this.getUserByUsername(username);
-//		
-//		List<BankUserDetails> list = userDetailsRepo.findByUser(user);
-//		
-//		if(list == null || list.isEmpty()) {
-//			throw new ResourceNotFoundException("username", "username", username);
-//		}
-//		
-//		return list.get(0);
+
 		return userDetailsRepo.getDetailsByUsername(username);
 	}
 	
 	public Address getAddressByUsername(String username) {
 		
-		
-//		Address address = addressRepository.getAddressByUsername(username);
-//		System.out.println(address);
-//		
-//		
-//		User user =  this.getUserByUsername(username);
-//		
-//		List<Address> list = addressRepository.findByUser(user);
-//		
-//		if(list == null || list.isEmpty()) {
-//			throw new ResourceNotFoundException("username", "username", username);
-//		}
-//		
-//		return list.get(0);
 		return addressRepository.getAddressByUsername(username);
 	}
 	
@@ -187,10 +164,10 @@ public class UserServicesImple implements UserServices {
 	}
 
 	@Override
-	public User getUserById(int user_id) {
+	public UserDto getUserById(int user_id) {
 		User u =  userRepo.findById(user_id).orElseThrow(()-> new ResourceNotFoundException("user", "Id", user_id));
 		
-		return u;
+		return this.modelMapper.map(u, UserDto.class);
 	}
 	
 	
@@ -198,13 +175,20 @@ public class UserServicesImple implements UserServices {
 	public boolean deleteUser(int user_id) {
 			User u =  userRepo.findById(user_id).
 					orElseThrow(()-> new ResourceNotFoundException("user", "Id", user_id));
-			userRepo.delete(u);
+			
+			// Before deleting user we need to delete address and user_detail entries
+			
+			//userRepo.delete(u);
 			return true;
 	}
 	
 	@Override
-	public List<User> getAllUsers() {
-		return userRepo.findAll();
+	public List<UserDto> getAllUsers() {
+		List<User> userList = userRepo.findAll();
+		
+		List<UserDto> dtos = userList.stream().map((user)-> this.modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
+		
+		return dtos;
 	}
 	
 	

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.akshay.bankSystem.configs.Constants;
 import com.akshay.bankSystem.entities.Account;
 import com.akshay.bankSystem.entities.Transaction;
-import com.akshay.bankSystem.payloads.ApiResponse;
+import com.akshay.bankSystem.payloads.response.ApiResponse;
 import com.akshay.bankSystem.services.TransactionServices;
 
 @RestControllerAdvice

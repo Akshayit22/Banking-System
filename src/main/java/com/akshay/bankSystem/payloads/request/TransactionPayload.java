@@ -1,10 +1,8 @@
-package com.akshay.bankSystem.payloads;
+package com.akshay.bankSystem.payloads.request;
 
-import jakarta.persistence.Entity;
 import lombok.Data;
 
 @Data
-@Entity
 public class TransactionPayload {
 	
 	private int AccountNumber;

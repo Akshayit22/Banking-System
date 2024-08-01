@@ -14,11 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.akshay.bankSystem.dto.UserDto;
-import com.akshay.bankSystem.entities.User;
 import com.akshay.bankSystem.exceptions.ApiException;
-import com.akshay.bankSystem.payloads.JwtRequest;
-import com.akshay.bankSystem.payloads.JwtResponse;
-import com.akshay.bankSystem.payloads.SignupRequest;
+import com.akshay.bankSystem.payloads.request.JwtRequest;
+import com.akshay.bankSystem.payloads.request.SignupRequest;
+import com.akshay.bankSystem.payloads.response.JwtResponse;
 import com.akshay.bankSystem.security.JwtTokenHelper;
 import com.akshay.bankSystem.services.UserServices;
 
@@ -49,9 +48,9 @@ public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity<JwtResponse> userLogin(@RequestBody JwtRequest request) throws Exception {
 
-		this.authenticate(request.getUsername(), request.getPassword());
+		this.authenticate(request.getUserName(), request.getPassword());
 
-		UserDetails userDetails = this.userDetailsService.loadUserByUsername(request.getUsername());
+		UserDetails userDetails = this.userDetailsService.loadUserByUsername(request.getUserName());
 
 		String generateTokenString = this.jwtTokenHelper.generateToken(userDetails);
 
@@ -63,13 +62,15 @@ public class AuthController {
 	}
 
 	private void authenticate(String username, String password) throws Exception {
+		
+		this.userDetailsService.loadUserByUsername(username);
+
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
 				password);
 
 		try {
 			this.authenticationManager.authenticate(authenticationToken);
-		} 
-		catch (BadCredentialsException e) {
+		} catch (BadCredentialsException e) {
 			System.out.println("Invalid Details !!");
 			throw new ApiException("Invalid username and password !!");
 		}

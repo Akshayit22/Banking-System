@@ -5,7 +5,7 @@ import java.util.List;
 import com.akshay.bankSystem.entities.Account;
 import com.akshay.bankSystem.entities.Transaction;
 import com.akshay.bankSystem.entities.User;
-import com.akshay.bankSystem.payloads.TransactionPayload;
+import com.akshay.bankSystem.payloads.request.TransactionPayload;
 
 public interface TransactionServices {
 

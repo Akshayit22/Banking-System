@@ -2,20 +2,26 @@ package com.akshay.bankSystem.services;
 
 import java.util.List;
 
-import com.akshay.bankSystem.entities.Account;
+import com.akshay.bankSystem.dto.AccountDto;
+import com.akshay.bankSystem.dto.NomineeDto;
 
 public interface AccountServices {
 
-	public Account createAccount(int userId, Account account);
+	public AccountDto createAccount(String username, AccountDto account);
+
+	public AccountDto updateAccount(String username, AccountDto account);
+
+	public List<AccountDto> getAllAccounts();
+
+	public AccountDto getAccountByAccountNumber(int accountNumber);
+
+	public List<AccountDto> getAccountsByUsername(String username);
 	
-	public Account updateAccount(int userId, Account account);
+
+	public NomineeDto createNominee(int accountNumber, NomineeDto nominee);
+
+	public NomineeDto updateNominee(int accountNumber, NomineeDto nominee);
 	
-	public List<Account> getAllAccounts();
-	
-	public Account getAccountByAccountNumber(int accountNumber);
-	
-	public List<Account> getAccountsByUserId(int userId);
-	
-	
-	
+	public List<NomineeDto> getAllNominees();
+
 }

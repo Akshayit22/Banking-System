@@ -18,15 +18,13 @@ import com.akshay.bankSystem.dto.AddressDto;
 import com.akshay.bankSystem.dto.UserDetailsDto;
 import com.akshay.bankSystem.dto.UserDto;
 import com.akshay.bankSystem.dto.UserInfo;
-import com.akshay.bankSystem.entities.User;
-import com.akshay.bankSystem.payloads.SignupRequest;
+import com.akshay.bankSystem.payloads.request.SignupRequest;
 import com.akshay.bankSystem.services.SecuredRestController;
 import com.akshay.bankSystem.services.UserServices;
 
 @RestController
 public class UserController implements SecuredRestController{
 
-	private static final String String = null;
 	@Autowired
 	private UserServices service;
 	
@@ -94,37 +92,37 @@ public class UserController implements SecuredRestController{
 	}
 	
 	
+	/*---------------------- Bank Routes ------------------------*/
 	
 	
 
 	@GetMapping("/bank/users")
 	@PreAuthorize("hasAuthority('EMPLOYEE','ADMIN')")
-	public ResponseEntity<List<User>> getAllUsers() {
-		List<User> all = service.getAllUsers();
-		if(all == null || all.size() == 0) {
-			return ResponseEntity.status(500).body(null);
-		}
-		return ResponseEntity.status(200).body(all);
+	public ResponseEntity<List<UserDto>> getAllUsers() {
+		return ResponseEntity.status(200).body(service.getAllUsers());
 	}
 	
-	@GetMapping("/user/id/{user_id}")
-	public ResponseEntity<User> userByUserId(@PathVariable int user_id) {
-		User u = service.getUserById(user_id);
+	@GetMapping("/bank/user/id/{user_id}")
+	@PreAuthorize("hasAuthority('EMPLOYEE','ADMIN')")
+	public ResponseEntity<UserDto> userByUserId(@PathVariable int user_id) {
+		UserDto u = service.getUserById(user_id);
 		if(u == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 		return ResponseEntity.status(HttpStatus.FOUND).body(u);
 	}
+		
 	
-	@GetMapping("/user/username/{username}")
-	public ResponseEntity<User> userByUserId(@PathVariable String username) {
-		User u = service.getUserByUsername(username);
-		if(u == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		}
-		return ResponseEntity.status(HttpStatus.FOUND).body(u);
+	@PostMapping("/bank/user")
+	@PreAuthorize("hasAuthority('EMPLOYEE','ADMIN')")
+	public ResponseEntity<UserDto> creatUser(@RequestBody SignupRequest user) {
+		UserDto u = service.createUser(user);
+		if (u == null)
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		return ResponseEntity.status(HttpStatus.CREATED).body(u);
 	}
 	
+	/*---------------------- Admin Routes ------------------------*/
 	
 	
 	@DeleteMapping("/admin/user/{user_id}")
@@ -136,13 +134,9 @@ public class UserController implements SecuredRestController{
 		return HttpStatus.NOT_MODIFIED;
 	}
 	
-//	@PostMapping("/bank/user")
-//	@PreAuthorize("hasAuthority('EMPLOYEE','ADMIN')")
-//	public ResponseEntity<User> creatUser(@RequestBody User user) {
-//		User u = service.createUser(user);
-//		if (u == null)
-//			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-//		return ResponseEntity.status(HttpStatus.CREATED).body(u);
-//	}
+
 	
 }
+
+
+

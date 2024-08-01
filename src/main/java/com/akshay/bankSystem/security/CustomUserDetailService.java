@@ -20,6 +20,10 @@ public class CustomUserDetailService implements UserDetailsService {
 		
 		User user = this.userRepository.getUserByUsername(username);
 		
+		if(user == null) {
+			throw new UsernameNotFoundException("User with "+username+" is not found.");
+		}
+		
 		return new CustomUserDetails(user);
 	}
 

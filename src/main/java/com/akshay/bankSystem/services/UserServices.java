@@ -7,9 +7,11 @@ import com.akshay.bankSystem.dto.UserDetailsDto;
 import com.akshay.bankSystem.dto.UserDto;
 import com.akshay.bankSystem.dto.UserInfo;
 import com.akshay.bankSystem.entities.User;
-import com.akshay.bankSystem.payloads.SignupRequest;
+import com.akshay.bankSystem.payloads.request.SignupRequest;
 
 public interface UserServices {
+	
+	// user service
 	
 	public UserDto createUser(SignupRequest user);
 	
@@ -25,15 +27,15 @@ public interface UserServices {
 	
 	public UserInfo getUserInformation(String username);
 	
+	// bank service
 	
+	public List<UserDto> getAllUsers();
 	
-	public List<User> getAllUsers();
-	
-	
-	public User getUserById(int user_id);
+	public UserDto getUserById(int user_id);
 	
 	public User getUserByUsername(String username);
 	
+	// admin service
 	
 	public boolean deleteUser(int user_id);
 	

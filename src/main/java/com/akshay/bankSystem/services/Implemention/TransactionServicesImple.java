@@ -6,14 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.akshay.bankSystem.configs.Constants;
 import com.akshay.bankSystem.entities.Account;
 import com.akshay.bankSystem.entities.Transaction;
 import com.akshay.bankSystem.entities.User;
-import com.akshay.bankSystem.exceptions.ApiException;
 import com.akshay.bankSystem.exceptions.ResourceNotFoundException;
 import com.akshay.bankSystem.exceptions.TransactionException;
-import com.akshay.bankSystem.payloads.TransactionPayload;
+import com.akshay.bankSystem.payloads.request.TransactionPayload;
 import com.akshay.bankSystem.repositories.AccountRespository;
 import com.akshay.bankSystem.repositories.TransactionRepository;
 import com.akshay.bankSystem.repositories.UserRepository;

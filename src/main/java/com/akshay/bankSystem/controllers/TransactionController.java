@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.akshay.bankSystem.entities.Transaction;
-import com.akshay.bankSystem.payloads.TransactionPayload;
+import com.akshay.bankSystem.payloads.request.TransactionPayload;
 import com.akshay.bankSystem.services.TransactionServices;
 
 @RestController

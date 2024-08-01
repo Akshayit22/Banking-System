@@ -8,7 +8,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,7 +31,7 @@ public class MySecurityConfiguration {
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
 	
-	private static final String[] WHITE_LIST_URL = {"/api/auth/**","/error","/health-check","/v3/api-docs","/v3/api-docs/swagger-config","/swagger-ui/**","/swagger-resources/*"};
+	private static final String[] WHITE_LIST_URL = {"/api/auth/**","/error","/health-check","/api-docs/**","/swagger-ui/**","/swagger-resources/*"};
 	
 	private static final String[] ADMIN_LIST_URL = {"/admin/**","/bank/** "};
 	
@@ -55,12 +54,12 @@ public class MySecurityConfiguration {
     }
 	
 	
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "removal" })
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http)throws Exception{
 		http.
 			csrf().disable().
-			authorizeRequests().
+			authorizeHttpRequests().
 			requestMatchers(WHITE_LIST_URL).permitAll().
 			requestMatchers(EMPLOYEE_ADMIN_LIST_URL).hasAnyAuthority(Constants.ADMIN_USER,Constants.EMPLOYEE_USER).
 			requestMatchers(EMPLOYEE_LIST_URL).hasAnyAuthority(Constants.EMPLOYEE_USER).
