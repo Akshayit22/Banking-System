@@ -31,12 +31,12 @@ public class Loan {
 	@Column(name = "loan_amount", nullable = false)
 	private int loanAmount;
 
-	@Column(name = "loan_type", nullable = false)
-	private String loanType;
-
 	@Column(name = "loan_status", nullable = false)
 	private String loanStatus;
 
+	@Column(name = "loan_type", nullable = false)
+	private String loanType;
+	
 	@Column(name = "createdAt", nullable = false)
 	private Date createdAt = new Date();
 
@@ -53,10 +53,6 @@ public class Loan {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@ManyToOne
-	@JsonBackReference
-	@JoinColumn(name = "branch_id")
-	private Branch branch;
 
 	/*------- constructor - getters - setters -----------*/
 
@@ -64,8 +60,7 @@ public class Loan {
 		super();
 	}
 
-	public Loan(int loanId, int loanAmount, String loanType, String loanStatus, Account account, User user,
-			Branch branch) {
+	public Loan(int loanId, int loanAmount, String loanType, String loanStatus, Account account, User user) {
 		super();
 		LoanId = loanId;
 		this.loanAmount = loanAmount;
@@ -73,7 +68,6 @@ public class Loan {
 		this.loanStatus = loanStatus;
 		this.account = account;
 		this.user = user;
-		this.branch = branch;
 	}
 
 	public int getLoanId() {
@@ -124,12 +118,20 @@ public class Loan {
 		this.user = user;
 	}
 
-	public Branch getBranch() {
-		return branch;
+	public Date getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setBranch(Branch branch) {
-		this.branch = branch;
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
 	@PrePersist

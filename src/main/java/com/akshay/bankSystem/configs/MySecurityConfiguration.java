@@ -54,23 +54,22 @@ public class MySecurityConfiguration {
     }
 	
 	
-	@SuppressWarnings({ "removal" })
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http)throws Exception{
-		http.
-			csrf().disable().
-			authorizeHttpRequests().
-			requestMatchers(WHITE_LIST_URL).permitAll().
-			requestMatchers(EMPLOYEE_ADMIN_LIST_URL).hasAnyAuthority(Constants.ADMIN_USER,Constants.EMPLOYEE_USER).
-			requestMatchers(EMPLOYEE_LIST_URL).hasAnyAuthority(Constants.EMPLOYEE_USER).
-			requestMatchers(ADMIN_LIST_URL).hasAnyAuthority(Constants.ADMIN_USER).
-			anyRequest().
-			authenticated().
-			and().
-			exceptionHandling().authenticationEntryPoint(this.jwtAuthenticationEntryPoint)
-			.and().
-			sessionManagement().
-			sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.
+                csrf(csrf -> csrf.disable()).
+                authorizeHttpRequests(requests -> 
+                requests.
+	                requestMatchers(WHITE_LIST_URL).permitAll().
+	                requestMatchers(EMPLOYEE_ADMIN_LIST_URL).hasAnyAuthority(Constants.ADMIN_USER, Constants.EMPLOYEE_USER).
+	                requestMatchers(EMPLOYEE_LIST_URL).hasAnyAuthority(Constants.EMPLOYEE_USER).
+	                requestMatchers(ADMIN_LIST_URL).hasAnyAuthority(Constants.ADMIN_USER).
+	                anyRequest().
+	                authenticated()).
+	                exceptionHandling(handling -> handling.authenticationEntryPoint(this.jwtAuthenticationEntryPoint)).
+	                sessionManagement(management -> management.
+	                sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+	             );
 		
 		http.addFilterBefore(this.jwtAuthenticationFilter,UsernamePasswordAuthenticationFilter.class);
 		
@@ -78,6 +77,3 @@ public class MySecurityConfiguration {
 		
 	}
 }
-//requestMatchers(EMPLOYEE_ADMIN_LIST_URL).hasAnyRole(Constants.ADMIN_USER,Constants.EMPLOYEE_USER)
-//.requestMatchers(EMPLOYEE_LIST_URL).hasAnyAuthority(Constants.EMPLOYEE_USER)
-//.requestMatchers(ADMIN_LIST_URL).hasAnyAuthority(Constants.ADMIN_USER)

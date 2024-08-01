@@ -51,24 +51,28 @@ public class AuthController {
 		this.authenticate(request.getUserName(), request.getPassword());
 
 		UserDetails userDetails = this.userDetailsService.loadUserByUsername(request.getUserName());
+		if(userDetails == null) {
+			throw new BadCredentialsException("Username is Invalide");
+		}
 
 		String generateTokenString = this.jwtTokenHelper.generateToken(userDetails);
 
 		JwtResponse response = new JwtResponse();
 		response.setToken(generateTokenString);
 		System.out.println(generateTokenString);
-
+		
 		return ResponseEntity.status(200).body(response);
 	}
 
 	private void authenticate(String username, String password) throws Exception {
-		
-		this.userDetailsService.loadUserByUsername(username);
-
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
-				password);
-
 		try {
+			if(this.userDetailsService.loadUserByUsername(username) == null) {
+				throw new BadCredentialsException("Username is Invalide");
+			}
+	
+			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
+					password);
+
 			this.authenticationManager.authenticate(authenticationToken);
 		} catch (BadCredentialsException e) {
 			System.out.println("Invalid Details !!");

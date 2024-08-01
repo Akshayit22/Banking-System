@@ -57,22 +57,6 @@ public class AccountController {
 	}
 	
 	
-//	/*---------------------- Account - Loan --------------*/
-//	
-//	@PostMapping("/account/loan/{}")
-//	public ResponseEntity<LoanDto> createLoan(){
-//		
-//		return null;
-//	}
-//	
-//	@PutMapping("/account/loan")
-//	public ResponseEntity<LoanDto> updateLoan(){
-//		
-//		return null;
-//	}
-//	
-	
-	
 	/*---------------------- Account - Nominee --------------*/
 	
 	@PostMapping("/account/nominee/{accountnumber}")
