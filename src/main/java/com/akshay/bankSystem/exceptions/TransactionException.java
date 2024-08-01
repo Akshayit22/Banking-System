@@ -6,15 +6,26 @@ public class TransactionException extends RuntimeException{
 	
 	String message;
 	Transaction details;
-	int accountNumber;
+	int fieldValue;
+
 	
-	public TransactionException(String message, Transaction details,int accountNumber) {
+	public TransactionException() {
+		super();
+	}
+
+	public TransactionException(String message, Transaction details, int fieldValue) {
 		super();
 		this.message = message;
 		this.details = details;
-		this.accountNumber = accountNumber;
+		this.fieldValue = fieldValue;
 	}
-	
+
+	public TransactionException(String message, int fieldValue) {
+		super();
+		this.message = message;
+		this.fieldValue = fieldValue;
+	}
+
 	public String getMessage() {
 		return message;
 	}
@@ -31,12 +42,14 @@ public class TransactionException extends RuntimeException{
 		this.details = details;
 	}
 
-	public int getAccountNumber() {
-		return accountNumber;
+	public int getFieldValue() {
+		return fieldValue;
 	}
 
-	public void setAccountNumber(int accountNumber) {
-		this.accountNumber = accountNumber;
+	public void setFieldValue(int fieldValue) {
+		this.fieldValue = fieldValue;
 	}
+
+	
 	
 }

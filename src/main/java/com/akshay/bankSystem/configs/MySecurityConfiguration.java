@@ -31,7 +31,7 @@ public class MySecurityConfiguration {
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
 	
-	private static final String[] WHITE_LIST_URL = {"/api/auth/**","/error","/health-check","/api-docs/**","/swagger-ui/**","/swagger-resources/*"};
+	private static final String[] WHITE_LIST_URL = {"/api/auth/**","/error","/health-check","/api-docs/**","/swagger-ui/**","/swagger-resources/*","/sample/transaction"};
 	
 	private static final String[] ADMIN_LIST_URL = {"/admin/**","/bank/** "};
 	

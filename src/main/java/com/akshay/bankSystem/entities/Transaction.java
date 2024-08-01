@@ -24,6 +24,9 @@ public class Transaction {
 
 	@Column(name = "transaction_status", nullable = false)
 	private String status;
+	
+	@Column(name = "remark", nullable = false)
+	private String message;
 
 	@Column(name = "transaction_amount", nullable = false)
 	private int amount;
@@ -40,6 +43,14 @@ public class Transaction {
 
 	public Transaction() {
 
+	}
+	
+	public Transaction(int amount, String transactionType, String status,String message) {
+		super();
+		this.transactionType = transactionType;
+		this.status = status;
+		this.amount = amount;
+		this.message = message;
 	}
 
 	public Transaction(int transactionId, String transactionType, String status, int amount, Date createdAt) {
@@ -97,6 +108,14 @@ public class Transaction {
 
 	public void setAccount(Account account) {
 		this.account = account;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	@PrePersist

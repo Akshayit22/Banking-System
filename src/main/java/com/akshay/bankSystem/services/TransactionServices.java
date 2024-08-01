@@ -1,7 +1,9 @@
 package com.akshay.bankSystem.services;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
+import com.akshay.bankSystem.dto.TransactionDto;
 import com.akshay.bankSystem.entities.Account;
 import com.akshay.bankSystem.entities.Transaction;
 import com.akshay.bankSystem.entities.User;
@@ -17,12 +19,12 @@ public interface TransactionServices {
 	
 	public Transaction createFailedTransaction(Transaction transactionDetails);
 	
-	public Account getAccountByAccount(int accountNumber);
-	
 	public User getUserByUserId(int userId);
 	
 	public List<Transaction> getAllTransactions();
 	
 	public List<Transaction> getAccountTransactions(int accountNumber);
+	
+	public CompletableFuture<List<User>> sample();
 	
 }

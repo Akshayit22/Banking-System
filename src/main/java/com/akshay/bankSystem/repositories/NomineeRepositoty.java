@@ -12,3 +12,5 @@ public interface NomineeRepositoty extends JpaRepository<Nominee,Integer>{
 	@Query("select n from Nominee n join Account a on a.accountNumber=:accountNumber")
 	public Nominee getNomineeByAccountNumber(@Param("accountNumber") int accountNumber);
 }
+
+// query not working here

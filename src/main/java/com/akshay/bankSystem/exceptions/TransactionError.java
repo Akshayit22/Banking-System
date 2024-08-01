@@ -11,6 +11,15 @@ public class TransactionError {
 
 	}
 
+	
+	
+	public TransactionError(String message) {
+		super();
+		this.message = message;
+	}
+
+
+
 	public TransactionError(String message, Transaction details) {
 		super();
 		this.message = message;

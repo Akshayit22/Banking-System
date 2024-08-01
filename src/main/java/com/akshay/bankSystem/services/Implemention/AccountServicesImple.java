@@ -145,6 +145,10 @@ public class AccountServicesImple implements AccountServices {
 		
 		return dtos;
 	}
+	
+	// get nominee by account number
+	
+	// get accoutn details -- acc , nominee , loan info
 
 	/*-------------- Helper function ------------------------*/
 

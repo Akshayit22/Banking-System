@@ -57,15 +57,15 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<TransactionError> transactionException(TransactionException tx){
 		
 		String message = tx.getMessage();
-		Transaction detailsError = tx.getDetails();
-//		System.out.println(message+" --> "+detailsError.getTransactionType()+" --> "+detailsError.toString());
-		
-		Account account = services.getAccountByAccount(tx.getAccountNumber());
-		detailsError.setAccount(account);
-		detailsError.setStatus(Constants.STATUS_FAILED);
-		services.createFailedTransaction(detailsError);
-		
-		return new ResponseEntity<TransactionError>(new TransactionError(message, detailsError),HttpStatus.BAD_REQUEST);
+
+		//		Transaction detailsError = tx.getDetails();
+////		System.out.println(message+" --> "+detailsError.getTransactionType()+" --> "+detailsError.toString());
+//		
+//		Account account = services.getAccountByAccount(tx.getAccountNumber());
+//		detailsError.setAccount(account);
+//		detailsError.setStatus(Constants.STATUS_FAILED);
+//		services.createFailedTransaction(detailsError);
+		return new ResponseEntity<TransactionError>(new TransactionError(message),HttpStatus.BAD_REQUEST);
 	}
 	
 }
