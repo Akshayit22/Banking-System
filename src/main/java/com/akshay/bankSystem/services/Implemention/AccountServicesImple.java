@@ -9,13 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.akshay.bankSystem.dto.AccountDetails;
 import com.akshay.bankSystem.dto.AccountDto;
+import com.akshay.bankSystem.dto.LoanDto;
 import com.akshay.bankSystem.dto.NomineeDto;
 import com.akshay.bankSystem.entities.Account;
+import com.akshay.bankSystem.entities.Loan;
 import com.akshay.bankSystem.entities.Nominee;
 import com.akshay.bankSystem.entities.User;
 import com.akshay.bankSystem.exceptions.ResourceNotFoundException;
 import com.akshay.bankSystem.repositories.AccountRespository;
+import com.akshay.bankSystem.repositories.LoanRepositoty;
 import com.akshay.bankSystem.repositories.NomineeRepositoty;
 import com.akshay.bankSystem.repositories.UserRepository;
 import com.akshay.bankSystem.services.AccountServices;
@@ -31,6 +35,9 @@ public class AccountServicesImple implements AccountServices {
 
 	@Autowired
 	private NomineeRepositoty nomineeRepositoty;
+	
+	@Autowired
+	private LoanRepositoty loanRepository;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -94,35 +101,51 @@ public class AccountServicesImple implements AccountServices {
 
 		return dtos;
 	}
+	
+	@Override
+	public AccountDetails getAccountDetails(int accountNumber) {
+		Account account = accountRespository.findById(accountNumber).orElseThrow(
+				() -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber));
+		
+		List<Loan> list = this.loanRepository.findByAccount(account);
+		List<LoanDto> Loandtos = list.stream().map((loan) -> this.modelMapper.map(loan, LoanDto.class))
+				.collect(Collectors.toList());
+		
+		List<Nominee> nomineeList =  nomineeRepositoty.findByAccount(account);
+		List<NomineeDto> nomineeDtos = nomineeList.stream().map((nominee) -> this.modelMapper.map(nominee, NomineeDto.class))
+				.collect(Collectors.toList());
+		
+		return new AccountDetails(this.modelMapper.map(account,AccountDto.class),nomineeDtos,Loandtos);
+	}
+	
 
 	/*---------------------- Account - Nominee --------------*/
 
 	@Override
 	public NomineeDto createNominee(int accountNumber, NomineeDto nominee) {
 		Account account = accountRespository.findById(accountNumber)
-							.orElseThrow(() -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber));
-		
+				.orElseThrow(() -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber));
+
 		Nominee newNominee = this.modelMapper.map(nominee, Nominee.class);
 		newNominee.setAccount(account);
-		
+
 		newNominee = nomineeRepositoty.save(newNominee);
 		return this.modelMapper.map(newNominee, NomineeDto.class);
 	}
 
 	@Override
 	public NomineeDto updateNominee(int accountNumber, NomineeDto nominee) {
-//		Account account = accountRespository.findById(accountNumber)
-//				.orElseThrow(() -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber));
-		Nominee updateNominee = nomineeRepositoty.getNomineeByAccountNumber(accountNumber); 
-		
+
+		Nominee updateNominee = this.getNomineeByAccountNumber(accountNumber);
+
 		updateNominee.setName(nominee.getName());
 		updateNominee.setMobile(nominee.getMobile());
 		updateNominee.setRelation(nominee.getRelation());
 		updateNominee.setAddress(nominee.getAddress());
 		updateNominee.setUpdatedAt(new Date());
-		
+
 		Nominee newRecord = nomineeRepositoty.save(updateNominee);
-		
+
 		return this.modelMapper.map(newRecord, NomineeDto.class);
 	}
 
@@ -136,19 +159,16 @@ public class AccountServicesImple implements AccountServices {
 
 		return dtos;
 	}
-	
+
 	@Override
-	public List<NomineeDto> getAllNominees(){
+	public List<NomineeDto> getAllNominees() {
 		List<Nominee> list = nomineeRepositoty.findAll();
-		List<NomineeDto> dtos = list.stream().map((nominee)-> this.modelMapper.map(nominee, NomineeDto.class))
+		List<NomineeDto> dtos = list.stream().map((nominee) -> this.modelMapper.map(nominee, NomineeDto.class))
 				.collect(Collectors.toList());
-		
+
 		return dtos;
 	}
-	
-	// get nominee by account number
-	
-	// get accoutn details -- acc , nominee , loan info
+
 
 	/*-------------- Helper function ------------------------*/
 
@@ -158,6 +178,18 @@ public class AccountServicesImple implements AccountServices {
 			throw new ResourceNotFoundException("username", "username", username);
 		}
 		return user;
+	}
+	
+	public Nominee getNomineeByAccountNumber(int accountNumber) {
+		Account account = accountRespository.findById(accountNumber).orElseThrow(
+				() -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber));
+		List<Nominee> list = nomineeRepositoty.findByAccount(account);
+		
+		if(list.isEmpty() || list == null) {
+			throw new ResourceNotFoundException("Nominee for this accountNumber Not found.", "accountNumber", accountNumber);
+		}
+		
+		return list.get(0);
 	}
 
 }

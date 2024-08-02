@@ -132,10 +132,14 @@ public class UserServicesImple implements UserServices {
 	public UserInfo getUserInformation(String username) {
 		
 		UserDto user =  this.modelMapper.map(this.getUserByUsername(username),UserDto.class);
-		AddressDto address = this.modelMapper.map(this.getAddressByUsername(username),AddressDto.class);
-		UserDetailsDto details = this.modelMapper.map(this.getUserDetailsByUsername(username),UserDetailsDto.class);
 		
-		UserInfo info = new UserInfo(user,address,details);
+		Address address = this.getAddressByUsername(username);
+		AddressDto addressdto = address==null?null:this.modelMapper.map(address,AddressDto.class);
+		
+		BankUserDetails bankUserDetails = this.getUserDetailsByUsername(username);
+		UserDetailsDto details = bankUserDetails==null?null:this.modelMapper.map(bankUserDetails,UserDetailsDto.class);
+		
+		UserInfo info = new UserInfo(user,addressdto,details);
 		
 		return info;
 	}

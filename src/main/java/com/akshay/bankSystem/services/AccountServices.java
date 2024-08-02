@@ -2,6 +2,7 @@ package com.akshay.bankSystem.services;
 
 import java.util.List;
 
+import com.akshay.bankSystem.dto.AccountDetails;
 import com.akshay.bankSystem.dto.AccountDto;
 import com.akshay.bankSystem.dto.NomineeDto;
 
@@ -16,12 +17,12 @@ public interface AccountServices {
 	public AccountDto getAccountByAccountNumber(int accountNumber);
 
 	public List<AccountDto> getAccountsByUsername(String username);
-	
 
 	public NomineeDto createNominee(int accountNumber, NomineeDto nominee);
 
 	public NomineeDto updateNominee(int accountNumber, NomineeDto nominee);
-	
+
 	public List<NomineeDto> getAllNominees();
 
+	public AccountDetails getAccountDetails(int accountNumber);
 }

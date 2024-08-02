@@ -11,9 +11,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.akshay.bankSystem.configs.Constants;
-import com.akshay.bankSystem.entities.Account;
-import com.akshay.bankSystem.entities.Transaction;
 import com.akshay.bankSystem.payloads.response.ApiResponse;
 import com.akshay.bankSystem.services.TransactionServices;
 
@@ -57,14 +54,6 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<TransactionError> transactionException(TransactionException tx){
 		
 		String message = tx.getMessage();
-
-		//		Transaction detailsError = tx.getDetails();
-////		System.out.println(message+" --> "+detailsError.getTransactionType()+" --> "+detailsError.toString());
-//		
-//		Account account = services.getAccountByAccount(tx.getAccountNumber());
-//		detailsError.setAccount(account);
-//		detailsError.setStatus(Constants.STATUS_FAILED);
-//		services.createFailedTransaction(detailsError);
 		return new ResponseEntity<TransactionError>(new TransactionError(message),HttpStatus.BAD_REQUEST);
 	}
 	
