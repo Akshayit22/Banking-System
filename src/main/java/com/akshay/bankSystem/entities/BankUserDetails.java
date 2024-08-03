@@ -37,7 +37,7 @@ public class BankUserDetails {
 	@Column(name = "gender", nullable = false)
 	private String gender;
 
-	@Column(name = "age", columnDefinition = "int constraint age_check check(age>18)",nullable = false)
+	@Column(name = "age", columnDefinition = "int constraint age_check check(age>18)", nullable = false)
 	private int age;
 
 	@Column(name = "createdAt", nullable = false)

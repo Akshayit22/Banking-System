@@ -10,16 +10,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountDto {
-	
-	@Schema(accessMode = AccessMode.READ_ONLY)
+
 	private int accountNumber;
-	
+
 	private String accountType = "Saving";
-	
+
 	private int balance;
-	
+
 	private String securityPin;
-	
+
 	@Schema(accessMode = AccessMode.READ_ONLY)
 	private double interestRate;
 
@@ -62,8 +61,5 @@ public class AccountDto {
 	public void setInterestRate(double interestRate) {
 		this.interestRate = interestRate;
 	}
-	
-	
-	
-	
+
 }

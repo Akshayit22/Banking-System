@@ -14,17 +14,17 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransactionDto {
-	
-	private int transactionId; 
-	
+
+	private int transactionId;
+
 	private String transactionType;
-	
+
 	private String status;
-	
+
 	private String message;
 
 	private int amount;
-	
+
 	private Date createdAt;
 
 	public TransactionDto(int transactionId, String transactionType, String status, int amount, Date createdAt) {
@@ -83,7 +83,5 @@ public class TransactionDto {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	
-	
+
 }

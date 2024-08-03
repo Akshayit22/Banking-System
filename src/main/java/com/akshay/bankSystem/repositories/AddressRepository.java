@@ -14,8 +14,8 @@ import com.akshay.bankSystem.entities.User;
 public interface AddressRepository extends JpaRepository<Address, Integer> {
 
 	public List<Address> findByUser(User user);
-	
-	@Query(value = "select * from address a where user_id=(select user_id from users where username=:username) limit 1",nativeQuery = true)
+
+	@Query(value = "select * from address a where user_id=(select user_id from users where username=:username) limit 1", nativeQuery = true)
 	public Address getAddressByUsername(@Param("username") String username);
-	
+
 }

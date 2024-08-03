@@ -1,62 +1,51 @@
 package com.akshay.bankSystem.dto;
 
-import lombok.Data;
+import java.util.List;
 
+import lombok.Data;
 
 @Data
 public class UserInfo {
-	
+
 	private UserDto userDto;
-	
-	private AddressDto addressDto;
-	
+
+	private List<AddressDto> addressDtos;
+
 	private UserDetailsDto userDetailsDto;
-	
+
+	public UserInfo(UserDto userDto, List<AddressDto> addressDtos, UserDetailsDto userDetailsDto) {
+		super();
+		this.userDto = userDto;
+		this.addressDtos = addressDtos;
+		this.userDetailsDto = userDetailsDto;
+	}
 
 	public UserInfo() {
 		super();
 	}
-	
-	
-
-	public UserInfo(UserDto userDto, AddressDto addressDto, UserDetailsDto userDetailsDto) {
-		super();
-		this.userDto = userDto;
-		this.addressDto = addressDto;
-		this.userDetailsDto = userDetailsDto;
-	}
-
-
 
 	public UserDto getUserDto() {
 		return userDto;
 	}
 
-
 	public void setUserDto(UserDto userDto) {
 		this.userDto = userDto;
 	}
 
-
-	public AddressDto getAddressDto() {
-		return addressDto;
+	public List<AddressDto> getAddressDtos() {
+		return addressDtos;
 	}
 
-
-	public void setAddressDto(AddressDto addressDto) {
-		this.addressDto = addressDto;
+	public void setAddressDtos(List<AddressDto> addressDtos) {
+		this.addressDtos = addressDtos;
 	}
-
 
 	public UserDetailsDto getUserDetailsDto() {
 		return userDetailsDto;
 	}
 
-
 	public void setUserDetailsDto(UserDetailsDto userDetailsDto) {
 		this.userDetailsDto = userDetailsDto;
 	}
 
-	
-	
 }

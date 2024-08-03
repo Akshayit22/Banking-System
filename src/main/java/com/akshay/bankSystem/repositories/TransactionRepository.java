@@ -9,15 +9,13 @@ import org.springframework.stereotype.Repository;
 import com.akshay.bankSystem.entities.Account;
 import com.akshay.bankSystem.entities.Transaction;
 
-
 @Repository
 @EnableJpaRepositories
-public interface TransactionRepository extends JpaRepository<Transaction,Integer> {
+public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
 
 	public List<Transaction> findByAccount(Account account);
-	
+
 //	@Query("select t from Transaction t join Account a on a.accountNumber=:accountNumber")
 //	public List<Transaction> getTransactionByAccountNumber(@Param("accountNumber")int accountNumber);
-	
-}
 
+}

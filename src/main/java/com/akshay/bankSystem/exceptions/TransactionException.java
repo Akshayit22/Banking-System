@@ -2,13 +2,12 @@ package com.akshay.bankSystem.exceptions;
 
 import com.akshay.bankSystem.entities.Transaction;
 
-public class TransactionException extends RuntimeException{
-	
+public class TransactionException extends RuntimeException {
+
 	String message;
 	Transaction details;
 	int fieldValue;
 
-	
 	public TransactionException() {
 		super();
 	}
@@ -50,6 +49,4 @@ public class TransactionException extends RuntimeException{
 		this.fieldValue = fieldValue;
 	}
 
-	
-	
 }

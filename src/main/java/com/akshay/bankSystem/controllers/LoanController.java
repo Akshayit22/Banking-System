@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -24,28 +24,30 @@ public class LoanController {
 
 	/*---------------------- Account - Loan --------------*/
 
-	@PostMapping("/loan/account/{accountNumber}/user/{username}")
+	@PostMapping("/loan/account/{accountNumber}")
 	public ResponseEntity<LoanDto> createLoan(@PathVariable(required = true) int accountNumber,
-			@PathVariable String username, @RequestBody(required = true) LoanDto details) {
+			@RequestBody(required = true) LoanDto details) {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
 		return ResponseEntity.status(200).body(this.loanService.createLoan(accountNumber, username, details));
 	}
 
-	@PutMapping("/loan/account/{accountNumber}/user/{username}")
+	@PutMapping("/loan/account/{accountNumber}/loan/{loanId}")
 	public ResponseEntity<LoanDto> updateLoan(@PathVariable(required = true) int accountNumber,
-			@PathVariable String username, @RequestBody LoanDto details) {
+			@PathVariable(required = true) int loanId, @RequestBody LoanDto details) {
 
-		return ResponseEntity.status(200).body(this.loanService.updateLoan(accountNumber, username, details));
+		return ResponseEntity.status(200).body(this.loanService.updateLoan(accountNumber, loanId, details));
 	}
 
-	@GetMapping("/loan/account/user/{username}")
-	public ResponseEntity<List<LoanDto>> getloansByUsername(@PathVariable String username) {
+	@GetMapping("/loan/account")
+	public ResponseEntity<List<LoanDto>> getloansByUsername() {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
 		return ResponseEntity.status(200).body(this.loanService.getLoanByUsername(username));
 	}
 
 	@GetMapping("/loan/account/{accountNumber}")
-	public ResponseEntity<List<LoanDto>> getloansByAccountNumber(@RequestParam int accountNumber) {
+	public ResponseEntity<List<LoanDto>> getloansByAccountNumber(@PathVariable(required = true) int accountNumber) {
 
 		return ResponseEntity.status(200).body(this.loanService.getLoanByAccount(accountNumber));
 	}
@@ -61,7 +63,8 @@ public class LoanController {
 
 	@PreAuthorize("hasAuthority('EMPLOYEE','ADMIN')")
 	@PutMapping("/bank/loan/{loanId}")
-	public ResponseEntity<Boolean> changeLoanStatus(@RequestParam int loanId, @RequestBody Boolean result) {
+	public ResponseEntity<Boolean> changeLoanStatus(@PathVariable(required = true) int loanId,
+			@RequestBody Boolean result) {
 
 		return ResponseEntity.status(200).body(this.loanService.changeLoanStatus(loanId, result));
 	}

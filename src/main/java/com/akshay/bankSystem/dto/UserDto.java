@@ -14,7 +14,7 @@ import lombok.Setter;
 public class UserDto {
 
 	private String userName;
-	
+
 	private String userRole;
 
 	public String getUsername() {
@@ -32,5 +32,5 @@ public class UserDto {
 	public void setUserRole(String userRole) {
 		this.userRole = userRole;
 	}
-	
+
 }

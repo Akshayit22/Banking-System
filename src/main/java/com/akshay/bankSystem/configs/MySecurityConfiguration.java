@@ -1,6 +1,5 @@
 package com.akshay.bankSystem.configs;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,14 +29,15 @@ public class MySecurityConfiguration {
 
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
-	
-	private static final String[] WHITE_LIST_URL = {"/api/auth/**","/error","/health-check","/api-docs/**","/swagger-ui/**","/swagger-resources/*","/sample/transaction"};
-	
-	private static final String[] ADMIN_LIST_URL = {"/admin/**","/bank/** "};
-	
-	private static final String[] EMPLOYEE_LIST_URL = {"/employee/**"};
-	
-	private static final String[] EMPLOYEE_ADMIN_LIST_URL = {"/bank/** ","/bank/**"};
+
+	private static final String[] WHITE_LIST_URL = { "/api/auth/**", "/error", "/health-check", "/api-docs/**",
+			"/swagger-ui/**", "/swagger-resources/*", "/sample/transaction" };
+
+	private static final String[] ADMIN_LIST_URL = { "/admin/**", "/bank/** " };
+
+	private static final String[] EMPLOYEE_LIST_URL = { "/employee/**" };
+
+	private static final String[] EMPLOYEE_ADMIN_LIST_URL = { "/bank/** ", "/bank/**" };
 
 	@Bean
 	BCryptPasswordEncoder passwordEncoder() {
@@ -49,31 +49,24 @@ public class MySecurityConfiguration {
 	}
 
 	@Bean
-	AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
-	
-	
+	AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+			throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
+	}
+
 	@Bean
-	SecurityFilterChain filterChain(HttpSecurity http)throws Exception{
-        http.
-                csrf(csrf -> csrf.disable()).
-                authorizeHttpRequests(requests -> 
-                requests.
-	                requestMatchers(WHITE_LIST_URL).permitAll().
-	                requestMatchers(EMPLOYEE_ADMIN_LIST_URL).hasAnyAuthority(Constants.ADMIN_USER, Constants.EMPLOYEE_USER).
-	                requestMatchers(EMPLOYEE_LIST_URL).hasAnyAuthority(Constants.EMPLOYEE_USER).
-	                requestMatchers(ADMIN_LIST_URL).hasAnyAuthority(Constants.ADMIN_USER).
-	                anyRequest().
-	                authenticated()).
-	                exceptionHandling(handling -> handling.authenticationEntryPoint(this.jwtAuthenticationEntryPoint)).
-	                sessionManagement(management -> management.
-	                sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-	             );
-		
-		http.addFilterBefore(this.jwtAuthenticationFilter,UsernamePasswordAuthenticationFilter.class);
-		
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(requests -> requests.requestMatchers(WHITE_LIST_URL)
+				.permitAll().requestMatchers(EMPLOYEE_ADMIN_LIST_URL)
+				.hasAnyAuthority(Constants.ADMIN_USER, Constants.EMPLOYEE_USER).requestMatchers(EMPLOYEE_LIST_URL)
+				.hasAnyAuthority(Constants.EMPLOYEE_USER).requestMatchers(ADMIN_LIST_URL)
+				.hasAnyAuthority(Constants.ADMIN_USER).anyRequest().authenticated())
+				.exceptionHandling(handling -> handling.authenticationEntryPoint(this.jwtAuthenticationEntryPoint))
+				.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+		http.addFilterBefore(this.jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
 		return http.build();
-		
+
 	}
 }

@@ -8,9 +8,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserDetailsRepository extends JpaRepository<BankUserDetails, Integer>{
-	
-	@Query(value = "select * from user_details d where user_id=(select user_id from users where username=:username)",nativeQuery = true)
+public interface UserDetailsRepository extends JpaRepository<BankUserDetails, Integer> {
+
+	@Query(value = "select * from user_details d where user_id=(select user_id from users where username=:username)", nativeQuery = true)
 	public BankUserDetails getDetailsByUsername(@Param("username") String username);
-	
+
 }

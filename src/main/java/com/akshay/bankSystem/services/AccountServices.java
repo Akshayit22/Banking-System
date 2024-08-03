@@ -20,7 +20,7 @@ public interface AccountServices {
 
 	public NomineeDto createNominee(int accountNumber, NomineeDto nominee);
 
-	public NomineeDto updateNominee(int accountNumber, NomineeDto nominee);
+	public NomineeDto updateNominee(int nomineeId, NomineeDto nominee);
 
 	public List<NomineeDto> getAllNominees();
 

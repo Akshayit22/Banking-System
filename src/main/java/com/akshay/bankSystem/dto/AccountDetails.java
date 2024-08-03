@@ -8,13 +8,13 @@ import lombok.Data;
 
 @Data
 public class AccountDetails {
-	
+
 	@Schema(accessMode = AccessMode.READ_ONLY)
 	private AccountDto account;
-	
+
 	@Schema(accessMode = AccessMode.READ_ONLY)
 	private List<NomineeDto> nominee;
-	
+
 	@Schema(accessMode = AccessMode.READ_ONLY)
 	private List<LoanDto> loan;
 
@@ -53,7 +53,4 @@ public class AccountDetails {
 		this.loan = loan;
 	}
 
-	
-	
-	
 }

@@ -9,7 +9,7 @@ import com.akshay.bankSystem.entities.Account;
 import com.akshay.bankSystem.entities.Nominee;
 
 @Repository
-public interface NomineeRepositoty extends JpaRepository<Nominee,Integer>{
+public interface NomineeRepositoty extends JpaRepository<Nominee, Integer> {
 	public List<Nominee> findByAccount(Account account);
 }
 

@@ -6,20 +6,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoanDto {
-	
+
+	private int loanId;
+
 	private int loanAmount;
-	
+
 	private String loanType;
-	
+
 	@Schema(accessMode = AccessMode.READ_ONLY)
 	private String loanStatus;
-	
-	
 
 	public LoanDto() {
 		super();
@@ -32,7 +31,22 @@ public class LoanDto {
 		this.loanStatus = loanStatus;
 	}
 
-	
+	public LoanDto(int loanId, int loanAmount, String loanType, String loanStatus) {
+		super();
+		this.loanId = loanId;
+		this.loanAmount = loanAmount;
+		this.loanType = loanType;
+		this.loanStatus = loanStatus;
+	}
+
+	public int getLoanId() {
+		return loanId;
+	}
+
+	public void setLoanId(int loanId) {
+		this.loanId = loanId;
+	}
+
 	public int getLoanAmount() {
 		return loanAmount;
 	}
@@ -61,8 +75,5 @@ public class LoanDto {
 	public String toString() {
 		return "LoanDto [loanAmount=" + loanAmount + ", loanType=" + loanType + ", loanStatus=" + loanStatus + "]";
 	}
-	
-	
-	
-	
+
 }

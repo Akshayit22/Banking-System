@@ -1,7 +1,6 @@
 package com.akshay.bankSystem.controllers;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.akshay.bankSystem.entities.Transaction;
-import com.akshay.bankSystem.entities.User;
 import com.akshay.bankSystem.exceptions.ApiException;
 import com.akshay.bankSystem.payloads.request.TransactionPayload;
 import com.akshay.bankSystem.services.TransactionServices;
@@ -24,11 +22,6 @@ public class TransactionController {
 
 	@Autowired
 	private TransactionServices service;
-
-	@GetMapping("/sample/transaction")
-	public CompletableFuture<List<User>> sample() {
-		return service.sample();
-	}
 
 	@PostMapping("/transaction/deposit")
 	public ResponseEntity<Transaction> deposit(@RequestBody TransactionPayload details) {

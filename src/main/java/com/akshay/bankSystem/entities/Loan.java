@@ -26,7 +26,7 @@ public class Loan {
 	@Column(name = "loan_id", unique = true)
 	@SequenceGenerator(name = "loan_seq", sequenceName = "loan_seq", allocationSize = 1, initialValue = 1001)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "loan_seq")
-	private int LoanId;
+	private int loanId;
 
 	@Column(name = "loan_amount", nullable = false)
 	private int loanAmount;
@@ -36,7 +36,7 @@ public class Loan {
 
 	@Column(name = "loan_type", nullable = false)
 	private String loanType;
-	
+
 	@Column(name = "createdAt", nullable = false)
 	private Date createdAt = new Date();
 
@@ -53,29 +53,31 @@ public class Loan {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-
 	/*------- constructor - getters - setters -----------*/
 
 	public Loan() {
 		super();
 	}
 
-	public Loan(int loanId, int loanAmount, String loanType, String loanStatus, Account account, User user) {
+	public Loan(int loanId, int loanAmount, String loanStatus, String loanType, Date createdAt, Date updatedAt,
+			Account account, User user) {
 		super();
-		LoanId = loanId;
+		this.loanId = loanId;
 		this.loanAmount = loanAmount;
-		this.loanType = loanType;
 		this.loanStatus = loanStatus;
+		this.loanType = loanType;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 		this.account = account;
 		this.user = user;
 	}
 
 	public int getLoanId() {
-		return LoanId;
+		return loanId;
 	}
 
 	public void setLoanId(int loanId) {
-		LoanId = loanId;
+		this.loanId = loanId;
 	}
 
 	public int getLoanAmount() {

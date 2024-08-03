@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDetailsDto {
-	
+
 	private String name;
-	
+
 	private String mobile;
-	
+
 	private String gender;
-	
+
 	private int age;
 
 	public String getName() {
@@ -48,7 +48,5 @@ public class UserDetailsDto {
 	public void setAge(int age) {
 		this.age = age;
 	}
-	
-	
 
 }

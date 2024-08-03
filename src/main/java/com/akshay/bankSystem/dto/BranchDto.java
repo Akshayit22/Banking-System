@@ -12,13 +12,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BranchDto {
-	
+
 	private String name;
-	
+
 	private String ifscCode;
-	
+
 	private String address;
-	
+
 	private int pincode;
 
 }

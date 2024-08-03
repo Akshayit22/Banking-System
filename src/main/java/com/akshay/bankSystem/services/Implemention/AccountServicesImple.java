@@ -17,6 +17,7 @@ import com.akshay.bankSystem.entities.Account;
 import com.akshay.bankSystem.entities.Loan;
 import com.akshay.bankSystem.entities.Nominee;
 import com.akshay.bankSystem.entities.User;
+import com.akshay.bankSystem.exceptions.ApiException;
 import com.akshay.bankSystem.exceptions.ResourceNotFoundException;
 import com.akshay.bankSystem.repositories.AccountRespository;
 import com.akshay.bankSystem.repositories.LoanRepositoty;
@@ -35,7 +36,7 @@ public class AccountServicesImple implements AccountServices {
 
 	@Autowired
 	private NomineeRepositoty nomineeRepositoty;
-	
+
 	@Autowired
 	private LoanRepositoty loanRepository;
 
@@ -101,30 +102,35 @@ public class AccountServicesImple implements AccountServices {
 
 		return dtos;
 	}
-	
+
 	@Override
 	public AccountDetails getAccountDetails(int accountNumber) {
-		Account account = accountRespository.findById(accountNumber).orElseThrow(
-				() -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber));
-		
+		Account account = accountRespository.findById(accountNumber)
+				.orElseThrow(() -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber));
+
 		List<Loan> list = this.loanRepository.findByAccount(account);
 		List<LoanDto> Loandtos = list.stream().map((loan) -> this.modelMapper.map(loan, LoanDto.class))
 				.collect(Collectors.toList());
-		
-		List<Nominee> nomineeList =  nomineeRepositoty.findByAccount(account);
-		List<NomineeDto> nomineeDtos = nomineeList.stream().map((nominee) -> this.modelMapper.map(nominee, NomineeDto.class))
-				.collect(Collectors.toList());
-		
-		return new AccountDetails(this.modelMapper.map(account,AccountDto.class),nomineeDtos,Loandtos);
+
+		List<Nominee> nomineeList = nomineeRepositoty.findByAccount(account);
+		List<NomineeDto> nomineeDtos = nomineeList.stream()
+				.map((nominee) -> this.modelMapper.map(nominee, NomineeDto.class)).collect(Collectors.toList());
+
+		return new AccountDetails(this.modelMapper.map(account, AccountDto.class), nomineeDtos, Loandtos);
 	}
-	
 
 	/*---------------------- Account - Nominee --------------*/
 
 	@Override
 	public NomineeDto createNominee(int accountNumber, NomineeDto nominee) {
+		
 		Account account = accountRespository.findById(accountNumber)
 				.orElseThrow(() -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber));
+		
+		List<Nominee> list = this.nomineeRepositoty.findByAccount(account);
+		if(list.size() != 0) {
+			throw new ApiException("One Account can have only one Nominee For now..");
+		}
 
 		Nominee newNominee = this.modelMapper.map(nominee, Nominee.class);
 		newNominee.setAccount(account);
@@ -134,9 +140,10 @@ public class AccountServicesImple implements AccountServices {
 	}
 
 	@Override
-	public NomineeDto updateNominee(int accountNumber, NomineeDto nominee) {
+	public NomineeDto updateNominee(int nomineeId, NomineeDto nominee) {
 
-		Nominee updateNominee = this.getNomineeByAccountNumber(accountNumber);
+		Nominee updateNominee = nomineeRepositoty.findById(nomineeId)
+				.orElseThrow(() -> new ResourceNotFoundException("Nominee Not found", "nomineeId", nomineeId));
 
 		updateNominee.setName(nominee.getName());
 		updateNominee.setMobile(nominee.getMobile());
@@ -169,7 +176,6 @@ public class AccountServicesImple implements AccountServices {
 		return dtos;
 	}
 
-
 	/*-------------- Helper function ------------------------*/
 
 	public User getUserByUsername(String username) {
@@ -178,18 +184,6 @@ public class AccountServicesImple implements AccountServices {
 			throw new ResourceNotFoundException("username", "username", username);
 		}
 		return user;
-	}
-	
-	public Nominee getNomineeByAccountNumber(int accountNumber) {
-		Account account = accountRespository.findById(accountNumber).orElseThrow(
-				() -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber));
-		List<Nominee> list = nomineeRepositoty.findByAccount(account);
-		
-		if(list.isEmpty() || list == null) {
-			throw new ResourceNotFoundException("Nominee for this accountNumber Not found.", "accountNumber", accountNumber);
-		}
-		
-		return list.get(0);
 	}
 
 }

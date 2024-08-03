@@ -8,14 +8,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NomineeDto {
-	
+
+	private int nomineeId;
+
 	private String name;
-	
+
 	private String relation;
-	
+
 	private String mobile;
-	
+
 	private String address;
+
+	public int getNomineeId() {
+		return nomineeId;
+	}
+
+	public void setNomineeId(int nomineeId) {
+		this.nomineeId = nomineeId;
+	}
 
 	public String getName() {
 		return name;
@@ -48,7 +58,5 @@ public class NomineeDto {
 	public void setAddress(String addres) {
 		this.address = addres;
 	}
-	
-	
-		
+
 }

@@ -1,10 +1,10 @@
 package com.akshay.bankSystem.services.Implemention;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -144,13 +144,13 @@ public class TransactionServicesImple implements TransactionServices {
 		}
 
 		String pinEncoded = passwordEncoder.encode(securityPin);
-		System.out.println(pinEncoded);
 
 		if (!passwordEncoder.matches(securityPin, account.getSecurityPin())) {
 			throw new ApiException("Security pin is Incorrect.");
 		}
-
-		if (!account.getUser().getUserName().equals(username)) {
+		String LoggedInUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+		System.out.println(account.getUser().getUserName() + "  " + LoggedInUsername +"  "+ username);
+		if (!account.getUser().getUserName().equals(username) || !LoggedInUsername.equals(username)) {
 			throw new ApiException("User with this user name does not own account with this account number.");
 		}
 
@@ -174,17 +174,6 @@ public class TransactionServicesImple implements TransactionServices {
 	}
 
 	/*-------------------------- Other services ------------------------------*/
-
-	@Override
-	public CompletableFuture<List<User>> sample() {
-		System.out.println("PRINTING THREAD NAME ------------------->" + Thread.currentThread().getName());
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		return CompletableFuture.completedFuture(userRepository.findAll());
-	}
 
 	@Override
 	public List<Transaction> getAllTransactions() {

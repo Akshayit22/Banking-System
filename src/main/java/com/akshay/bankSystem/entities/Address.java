@@ -34,10 +34,10 @@ public class Address {
 	@Column(name = "area", nullable = false)
 	private String area;
 
-	@Column(name = "city",nullable = false)
+	@Column(name = "city", nullable = false)
 	private String city;
 
-	@Column(name = "pincode",nullable = false)
+	@Column(name = "pincode", nullable = false)
 	private int pincode;
 
 	@Column(name = "createdAt", nullable = false)

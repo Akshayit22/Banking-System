@@ -33,7 +33,6 @@ public class User {
 	@Column(name = "updatedAt", nullable = false)
 	private Date updatedAt;
 
-
 	/*------- constructor - getters - setters -----------*/
 
 	public User() {
@@ -113,7 +112,6 @@ public class User {
 			this.updatedAt = new Date();
 		}
 	}
-
 
 //	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch=FetchType.EAGER)
 //	@JsonManagedReference

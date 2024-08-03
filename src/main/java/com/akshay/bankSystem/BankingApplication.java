@@ -25,20 +25,20 @@ public class BankingApplication {
 	ModelMapper modelMapper() {
 		return new ModelMapper();
 	}
-	
+
 	@Bean("customThreadPoolTaskExecutor")
 	Executor getThreadPoolTaskExecutor() {
-		
+
 		ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
-		
+
 		threadPoolTaskExecutor.setCorePoolSize(4);
 		threadPoolTaskExecutor.setMaxPoolSize(4);
 		threadPoolTaskExecutor.setQueueCapacity(100);
 		threadPoolTaskExecutor.setThreadNamePrefix("My-thread-");
 		threadPoolTaskExecutor.initialize();
-		
+
 		return threadPoolTaskExecutor;
-		
+
 	}
 
 }

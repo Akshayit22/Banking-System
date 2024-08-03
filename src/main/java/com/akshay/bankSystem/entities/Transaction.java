@@ -24,7 +24,7 @@ public class Transaction {
 
 	@Column(name = "transaction_status", nullable = false)
 	private String status;
-	
+
 	@Column(name = "remark", nullable = false)
 	private String message;
 
@@ -44,8 +44,8 @@ public class Transaction {
 	public Transaction() {
 
 	}
-	
-	public Transaction(int amount, String transactionType, String status,String message) {
+
+	public Transaction(int amount, String transactionType, String status, String message) {
 		super();
 		this.transactionType = transactionType;
 		this.status = status;

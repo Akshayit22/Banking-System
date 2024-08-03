@@ -9,9 +9,9 @@ import com.akshay.bankSystem.entities.User;
 
 import java.util.List;
 
-
 @Repository
 public interface LoanRepositoty extends JpaRepository<Loan, Integer> {
 	List<Loan> findByAccount(Account account);
+
 	List<Loan> findByUser(User user);
 }

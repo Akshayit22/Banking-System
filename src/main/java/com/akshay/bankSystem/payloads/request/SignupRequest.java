@@ -1,15 +1,18 @@
 package com.akshay.bankSystem.payloads.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.AccessMode;
 import lombok.Data;
 
 @Data
 public class SignupRequest {
-	
+
 	private String userName;
-	
+
 	private String password;
-	
-	private String userRole;
+
+	@Schema(accessMode = AccessMode.READ_ONLY)
+	private String userRole = "USER";
 
 	public String getUserName() {
 		return userName;
@@ -34,7 +37,5 @@ public class SignupRequest {
 	public void setUserRole(String userRole) {
 		this.userRole = userRole;
 	}
-	
-	
-	
+
 }

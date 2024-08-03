@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,18 +29,24 @@ public class AccountController {
 
 	/*----------------- Account routes ---------------------*/
 
-	@PostMapping("/account/user/{username}")
-	public ResponseEntity<AccountDto> createAccount(@PathVariable String username, @RequestBody AccountDto account) {
+	@PostMapping("/account")
+	public ResponseEntity<AccountDto> createAccount(@RequestBody AccountDto account) {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.createAccount(username, account));
 	}
 
-	@PutMapping("/account/user/{username}")
-	public ResponseEntity<AccountDto> updateAccount(@PathVariable String username, @RequestBody AccountDto account) {
+	@PutMapping("/account")
+	public ResponseEntity<AccountDto> updateAccount(@RequestBody AccountDto account) {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.updateAccount(username, account));
 	}
 
-	@GetMapping("/account/user/{username}")
-	public ResponseEntity<List<AccountDto>> getAccountByUserId(@PathVariable String username) {
+	@GetMapping("/account")
+	public ResponseEntity<List<AccountDto>> getAccountByUserName() {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
 		List<AccountDto> accounts = service.getAccountsByUsername(username);
 		return ResponseEntity.status(HttpStatus.OK).body(accounts);
 
@@ -68,10 +75,10 @@ public class AccountController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.createNominee(accountNumber, nominee));
 	}
 
-	@PutMapping("/account/nominee/{accountnumber}")
-	public ResponseEntity<NomineeDto> updateNominee(@RequestParam int accountNumber, @RequestBody NomineeDto nominee) {
+	@PutMapping("/account/nominee/{nomineeId}")
+	public ResponseEntity<NomineeDto> updateNominee(@RequestParam int nomineeId, @RequestBody NomineeDto nominee) {
 
-		return ResponseEntity.status(200).body(service.updateNominee(accountNumber, nominee));
+		return ResponseEntity.status(200).body(service.updateNominee(nomineeId, nominee));
 	}
 
 	/*----------------- bank : Account route ---------------------*/

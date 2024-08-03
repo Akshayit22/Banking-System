@@ -13,6 +13,7 @@ import com.akshay.bankSystem.dto.LoanDto;
 import com.akshay.bankSystem.entities.Account;
 import com.akshay.bankSystem.entities.Loan;
 import com.akshay.bankSystem.entities.User;
+import com.akshay.bankSystem.exceptions.ApiException;
 import com.akshay.bankSystem.exceptions.ResourceNotFoundException;
 import com.akshay.bankSystem.repositories.LoanRepositoty;
 import com.akshay.bankSystem.services.AccountServices;
@@ -54,16 +55,15 @@ public class LoanServiceImple implements LoanService {
 	}
 
 	@Override
-	public LoanDto updateLoan(int accountNumber, String username, LoanDto details) {
+	public LoanDto updateLoan(int accountNumber, int loanId, LoanDto details) {
 
 		Account account = this.modelMapper.map(accountServices.getAccountByAccountNumber(accountNumber), Account.class);
 
-		List<Loan> list = loanRepository.findByAccount(account);
-		if (list.isEmpty() || list == null) {
-			throw new ResourceNotFoundException("Loan Not found For this account", "accountNumber", accountNumber);
+		Loan loan = loanRepository.findById(loanId)
+				.orElseThrow(() -> new ResourceNotFoundException("Loan Details Not Found.", "loanId", loanId));
+		if (accountNumber != loan.getAccount().getAccountNumber()) {
+			throw new ApiException("Loan Not Belongs to your account.");
 		}
-
-		Loan loan = list.get(0);
 		loan.setLoanAmount(details.getLoanAmount());
 		loan.setLoanType(details.getLoanType());
 		loan.setUpdatedAt(new Date());
