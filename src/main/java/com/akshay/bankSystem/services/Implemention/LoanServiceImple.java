@@ -40,7 +40,8 @@ public class LoanServiceImple implements LoanService {
 	@Override
 	public LoanDto createLoan(int accountNumber, String username, LoanDto details) {
 		Loan newLoan = new Loan();
-		Account account = this.modelMapper.map(accountServices.getAccountByAccountNumber(accountNumber), Account.class);
+		Account account = this.modelMapper.map(accountServices.getAccountByAccountNumber(username, accountNumber),
+				Account.class);
 
 		newLoan.setUser(userServices.getUserByUsername(username));
 		newLoan.setAccount(account);
@@ -55,9 +56,10 @@ public class LoanServiceImple implements LoanService {
 	}
 
 	@Override
-	public LoanDto updateLoan(int accountNumber, int loanId, LoanDto details) {
+	public LoanDto updateLoan(String username, int accountNumber, int loanId, LoanDto details) {
 
-		Account account = this.modelMapper.map(accountServices.getAccountByAccountNumber(accountNumber), Account.class);
+		Account account = this.modelMapper.map(accountServices.getAccountByAccountNumber(username, accountNumber),
+				Account.class);
 
 		Loan loan = loanRepository.findById(loanId)
 				.orElseThrow(() -> new ResourceNotFoundException("Loan Details Not Found.", "loanId", loanId));
@@ -84,8 +86,9 @@ public class LoanServiceImple implements LoanService {
 	}
 
 	@Override
-	public List<LoanDto> getLoanByAccount(int accountNumber) {
-		Account account = this.modelMapper.map(accountServices.getAccountByAccountNumber(accountNumber), Account.class);
+	public List<LoanDto> getLoanByAccount(String username, int accountNumber) {
+		Account account = this.modelMapper.map(accountServices.getAccountByAccountNumber(username, accountNumber),
+				Account.class);
 
 		List<Loan> list = this.loanRepository.findByAccount(account);
 		List<LoanDto> dtos = list.stream().map((loan) -> this.modelMapper.map(loan, LoanDto.class))

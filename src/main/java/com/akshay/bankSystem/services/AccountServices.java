@@ -14,7 +14,7 @@ public interface AccountServices {
 
 	public List<AccountDto> getAllAccounts();
 
-	public AccountDto getAccountByAccountNumber(int accountNumber);
+	public AccountDto getAccountByAccountNumber(String username,int accountNumber);
 
 	public List<AccountDto> getAccountsByUsername(String username);
 
@@ -24,5 +24,5 @@ public interface AccountServices {
 
 	public List<NomineeDto> getAllNominees();
 
-	public AccountDetails getAccountDetails(int accountNumber);
+	public AccountDetails getAccountDetails(String username,int accountNumber);
 }

@@ -71,6 +71,10 @@ public class AccountServicesImple implements AccountServices {
 		Account accountUpdate = accountRespository.findById(account.getAccountNumber()).orElseThrow(
 				() -> new ResourceNotFoundException("Account", "AccountNumber", account.getAccountNumber()));
 
+		if (!accountUpdate.getUser().getUserName().equals(username)) {
+			throw new ApiException("User can only update your own accounts.");
+		}
+
 		accountUpdate.setAccountType(account.getAccountType());
 		accountUpdate.setInterestRate(accountUpdate.getAccountType().equalsIgnoreCase("saving") ? 5.5 : 3.3);
 		accountUpdate.setUpdatedAt(new Date());
@@ -84,9 +88,12 @@ public class AccountServicesImple implements AccountServices {
 	}
 
 	@Override
-	public AccountDto getAccountByAccountNumber(int accountNumber) {
+	public AccountDto getAccountByAccountNumber(String username, int accountNumber) {
 		Account account = accountRespository.findById(accountNumber)
 				.orElseThrow(() -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber));
+		if (!account.getUser().getUserName().equals(username)) {
+			throw new ApiException("User can only access their own accounts.");
+		}
 		return this.modelMapper.map(account, AccountDto.class);
 	}
 
@@ -104,9 +111,12 @@ public class AccountServicesImple implements AccountServices {
 	}
 
 	@Override
-	public AccountDetails getAccountDetails(int accountNumber) {
+	public AccountDetails getAccountDetails(String username, int accountNumber) {
 		Account account = accountRespository.findById(accountNumber)
 				.orElseThrow(() -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber));
+		if (!account.getUser().getUserName().equals(username)) {
+			throw new ApiException("User can only access their own accounts.");
+		}
 
 		List<Loan> list = this.loanRepository.findByAccount(account);
 		List<LoanDto> Loandtos = list.stream().map((loan) -> this.modelMapper.map(loan, LoanDto.class))
@@ -123,12 +133,12 @@ public class AccountServicesImple implements AccountServices {
 
 	@Override
 	public NomineeDto createNominee(int accountNumber, NomineeDto nominee) {
-		
+
 		Account account = accountRespository.findById(accountNumber)
 				.orElseThrow(() -> new ResourceNotFoundException("Account", "AccountNumber", accountNumber));
-		
+
 		List<Nominee> list = this.nomineeRepositoty.findByAccount(account);
-		if(list.size() != 0) {
+		if (list.size() != 0) {
 			throw new ApiException("One Account can have only one Nominee For now..");
 		}
 

@@ -54,7 +54,8 @@ public class AccountController {
 
 	@GetMapping("/account/{accountNumber}")
 	public ResponseEntity<AccountDto> getAccountByAccountNumber(@PathVariable int accountNumber) {
-		AccountDto account = service.getAccountByAccountNumber(accountNumber);
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		AccountDto account = service.getAccountByAccountNumber(username,accountNumber);
 		if (account == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
@@ -63,8 +64,8 @@ public class AccountController {
 
 	@GetMapping("/account/details/{accountNumber}")
 	public ResponseEntity<AccountDetails> getAccountDetails(@PathVariable int accountNumber) {
-
-		return ResponseEntity.status(200).body(this.service.getAccountDetails(accountNumber));
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		return ResponseEntity.status(200).body(this.service.getAccountDetails(username,accountNumber));
 	}
 
 	/*---------------------- Account - Nominee --------------*/

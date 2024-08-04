@@ -8,11 +8,11 @@ public interface LoanService {
 
 	public LoanDto createLoan(int accountNumber, String username, LoanDto details);
 
-	public LoanDto updateLoan(int accountNumber, int loanId, LoanDto details);
+	public LoanDto updateLoan(String username,int accountNumber, int loanId, LoanDto details);
 
 	public List<LoanDto> getLoanByUsername(String username);
 
-	public List<LoanDto> getLoanByAccount(int accountNumber);
+	public List<LoanDto> getLoanByAccount(String username,int accountNumber);
 
 	public List<LoanDto> getAllloans();
 

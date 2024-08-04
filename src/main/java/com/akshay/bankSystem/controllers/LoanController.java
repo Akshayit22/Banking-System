@@ -35,8 +35,9 @@ public class LoanController {
 	@PutMapping("/loan/account/{accountNumber}/loan/{loanId}")
 	public ResponseEntity<LoanDto> updateLoan(@PathVariable(required = true) int accountNumber,
 			@PathVariable(required = true) int loanId, @RequestBody LoanDto details) {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-		return ResponseEntity.status(200).body(this.loanService.updateLoan(accountNumber, loanId, details));
+		return ResponseEntity.status(200).body(this.loanService.updateLoan(username, accountNumber, loanId, details));
 	}
 
 	@GetMapping("/loan/account")
@@ -48,8 +49,9 @@ public class LoanController {
 
 	@GetMapping("/loan/account/{accountNumber}")
 	public ResponseEntity<List<LoanDto>> getloansByAccountNumber(@PathVariable(required = true) int accountNumber) {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-		return ResponseEntity.status(200).body(this.loanService.getLoanByAccount(accountNumber));
+		return ResponseEntity.status(200).body(this.loanService.getLoanByAccount(username, accountNumber));
 	}
 
 	/*---------------------- Bank - Loan --------------*/
