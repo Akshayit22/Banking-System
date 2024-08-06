@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import com.akshay.bankSystem.dto.NomineeDto;
 import com.akshay.bankSystem.services.AccountServices;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class AccountController {
 
 	@Autowired
@@ -55,7 +57,7 @@ public class AccountController {
 	@GetMapping("/account/{accountNumber}")
 	public ResponseEntity<AccountDto> getAccountByAccountNumber(@PathVariable int accountNumber) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		AccountDto account = service.getAccountByAccountNumber(username,accountNumber);
+		AccountDto account = service.getAccountByAccountNumber(username, accountNumber);
 		if (account == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
@@ -65,7 +67,7 @@ public class AccountController {
 	@GetMapping("/account/details/{accountNumber}")
 	public ResponseEntity<AccountDetails> getAccountDetails(@PathVariable int accountNumber) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		return ResponseEntity.status(200).body(this.service.getAccountDetails(username,accountNumber));
+		return ResponseEntity.status(200).body(this.service.getAccountDetails(username, accountNumber));
 	}
 
 	/*---------------------- Account - Nominee --------------*/
@@ -96,7 +98,7 @@ public class AccountController {
 		return ResponseEntity.status(HttpStatus.OK).body(service.getAllNominees());
 	}
 
-	@DeleteMapping("/bank/account")
+	@DeleteMapping("/admin/account")
 	@PreAuthorize("hasAuthority('EMPLOYEE','ADMIN')")
 	public boolean deleteAccount() {
 

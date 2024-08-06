@@ -17,6 +17,7 @@ public class AccountDto {
 
 	private int balance;
 
+	@Schema(accessMode = AccessMode.WRITE_ONLY)
 	private String securityPin;
 
 	@Schema(accessMode = AccessMode.READ_ONLY)
