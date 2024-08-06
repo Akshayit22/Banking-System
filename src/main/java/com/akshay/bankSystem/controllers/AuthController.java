@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.akshay.bankSystem.dto.UserDto;
@@ -24,7 +25,8 @@ import com.akshay.bankSystem.services.UserServices;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true", methods = { RequestMethod.GET,
+		RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE })
 public class AuthController {
 
 	@Autowired
@@ -41,6 +43,7 @@ public class AuthController {
 
 	@PostMapping("/signup")
 	public ResponseEntity<UserDto> creatUser(@RequestBody SignupRequest user) {
+		System.out.println(user);
 		UserDto u = service.createUser(user);
 		if (u == null)
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);

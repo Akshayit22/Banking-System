@@ -45,11 +45,23 @@ public class UserServicesImple implements UserServices {
 
 	@Override
 	public UserDto createUser(SignupRequest userData) {
+		
+		System.out.println(userData);
 
 		User user = this.modelMapper.map(userData, User.class);
 		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-		UserDto userDto = this.modelMapper.map(userRepo.save(user), UserDto.class);
-
+		User newuser = userRepo.save(user);
+		UserDto userDto = this.modelMapper.map(newuser, UserDto.class);
+		
+		BankUserDetails newDetails = new BankUserDetails();
+		newDetails.setUser(newuser);
+		newDetails.setAge(userData.getAge());
+		newDetails.setName(userData.getName());
+		newDetails.setGender(userData.getGender());
+		newDetails.setMobile(userData.getMobile());
+		
+		BankUserDetails saveDetails = userDetailsRepo.save(newDetails);
+		
 		return userDto;
 	}
 

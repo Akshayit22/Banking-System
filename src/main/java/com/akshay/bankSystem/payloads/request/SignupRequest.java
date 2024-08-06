@@ -13,6 +13,14 @@ public class SignupRequest {
 
 	@Schema(accessMode = AccessMode.READ_ONLY)
 	private String userRole = "USER";
+	
+	private String name;
+
+	private String mobile;
+
+	private String gender;
+
+	private int age;
 
 	public String getUserName() {
 		return userName;
@@ -38,4 +46,44 @@ public class SignupRequest {
 		this.userRole = userRole;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	@Override
+	public String toString() {
+		return "SignupRequest [userName=" + userName + ", password=" + password + ", userRole=" + userRole + ", name="
+				+ name + ", mobile=" + mobile + ", gender=" + gender + ", age=" + age + "]";
+	}
+
+	
+	
 }

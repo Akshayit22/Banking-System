@@ -66,6 +66,16 @@ public class BankUserDetails {
 		this.user = user;
 	}
 
+	public BankUserDetails(String name, String mobile, String gender, int age) {
+		super();
+		this.name = name;
+		this.mobile = mobile;
+		this.gender = gender;
+		this.age = age;
+	}
+
+
+
 	public BankUserDetails() {
 		super();
 	}
