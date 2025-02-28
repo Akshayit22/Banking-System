@@ -8,23 +8,29 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: bank_system
-      MYSQL_USER: root
+      MYSQL_USER: admin
       MYSQL_PASSWORD: root
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-  
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uadmin -proot"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
   spring-app:
     build: .
     container_name: spring-app
     restart: always
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/bank_system
-      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_USERNAME: admin   # ✅ Use new user 'admin'
       SPRING_DATASOURCE_PASSWORD: root
     depends_on:
-      - mysql-db
+      mysql-db:
+        condition: service_healthy
     ports:
       - "8080:8080"
 
